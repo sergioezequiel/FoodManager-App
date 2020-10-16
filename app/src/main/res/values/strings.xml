@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoodManager</string>
+    <string name="titulo_login">LOGIN</string>
+    <string name="register_titulo">Register</string>
 </resources>
