@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Android Studio -->
-    <color name="colorPrimary">#383A3B</color>
-    <color name="colorPrimaryDark">#FEB117</color>
+    <color name="colorPrimary">#FEB117</color>
+    <color name="colorPrimaryDark">#131313</color>
     <color name="colorAccent">#FEB117</color>
 
     <!-- Other Colors-->

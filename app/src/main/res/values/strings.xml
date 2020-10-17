@@ -2,4 +2,6 @@
     <string name="app_name">FoodManager</string>
     <string name="titulo_login">LOGIN</string>
     <string name="register_titulo">Register</string>
+    <string name="app_inventory">Inventory</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

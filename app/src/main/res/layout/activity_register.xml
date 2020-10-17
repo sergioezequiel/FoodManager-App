@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity"
     android:background="@drawable/food_bg_blur"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="15dp"
+    tools:context=".RegisterActivity">
 
     <ImageView
         android:id="@+id/login_logo"
@@ -136,6 +136,7 @@
             app:layout_constraintTop_toBottomOf="@id/editTextPassword"
             app:srcCompat="@drawable/ic_baseline_add_24"
             tools:ignore="VectorDrawableCompat" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
