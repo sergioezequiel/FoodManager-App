@@ -35,7 +35,7 @@ public class InventoryFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.search){
+        if(id == R.id.action_search){
             Snackbar.make(getView(), "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return true;
