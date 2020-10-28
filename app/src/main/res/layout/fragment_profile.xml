@@ -6,20 +6,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_home"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_profile"
+        android:padding="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Profile"
-        android:textAlignment="center"
-        android:textColor="@color/nivel6"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/nivel1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+
+            app:layout_constraintStart_toStartOf="@id/constraint_layout_profile"
+            app:layout_constraintTop_toTopOf="@id/constraint_layout_profile"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/textViewProfileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="UmNicknaMe"
+            android:textColor="@color/nivel6"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@id/constraint_layout_profile"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/icon_profile"
+            app:layout_constraintTop_toTopOf="@id/constraint_layout_profile" />
+
+        <TextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pataria de cima"
+            android:textColor="@color/white"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/linear_layout_text"
+            app:layout_constraintEnd_toEndOf="@id/constraint_layout_profile"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/icon_profile"
+            app:layout_constraintTop_toBottomOf="@id/textViewProfileName"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_text"
+            app:layout_constraintTop_toBottomOf="@id/icon_profile"
+            app:layout_constraintBottom_toBottomOf="@id/constraint_layout_profile"
+            app:layout_constraintStart_toStartOf="@id/constraint_layout_profile"
+            app:layout_constraintEnd_toEndOf="@id/constraint_layout_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textViewTotalViewRecipes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".50"
+                android:text="Recipes"
+                android:textAlignment="center"
+                android:textColor="@color/nivel6"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textViewTotalViewInventory"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:textSize="22sp"
+                android:layout_height="wrap_content"
+                android:text="Inventory"
+                android:textColor="@color/nivel6"
+                android:layout_weight=".50"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_dados"
+            app:layout_constraintStart_toStartOf="@id/constraint_layout_profile"
+            app:layout_constraintEnd_toEndOf="@id/constraint_layout_profile"
+            app:layout_constraintTop_toBottomOf="@id/linear_layout_text"
+            app:layout_constraintBottom_toBottomOf="@id/constraint_layout_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textViewTotalRecipes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="215"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:layout_weight=".50"/>
+
+            <TextView
+                android:id="@+id/textViewTotalInventory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="20"
+                android:layout_weight=".50"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
