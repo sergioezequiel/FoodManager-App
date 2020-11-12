@@ -17,8 +17,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity {
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
+
+public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -37,65 +40,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        final ConstraintLayout constraintLayout = this.findViewById(R.id.container);
-        constraintLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-            public void onSwipeTop() {
-                /*Toast.makeText(MainActivity.this, "top", Toast.LENGTH_SHORT).show();*/
-            }
+        //TODO: No futuro tentar a adicionar o swipe para mudar de atividade
 
-            public void onSwipeRight() {
-
-                int selectedItemId = navView.getSelectedItemId();
-                MenuItem selectedItem = navView.getMenu().findItem(selectedItemId);
-
-                switch (selectedItem.toString()){
-                    case "Inventory":
-                        navView.setSelectedItemId(R.id.navigation_profile);
-                        break;
-                    case "Recipes":
-                        navView.setSelectedItemId(R.id.navigation_inventory);
-                        break;
-
-                    case "Shopping List":
-                        navView.setSelectedItemId(R.id.navigation_recipes);
-                        break;
-
-                    case "Profile":
-                        navView.setSelectedItemId(R.id.navigation_shopping_list);
-                        break;
-                }
-
-              /*  Toast.makeText(MainActivity.this,"Right" , Toast.LENGTH_SHORT).show();*/
-            }
-
-            public void onSwipeLeft() {
-                int selectedItemId = navView.getSelectedItemId();
-                MenuItem selectedItem = navView.getMenu().findItem(selectedItemId);
-
-                switch (selectedItem.toString()){
-                    case "Inventory":
-                        navView.setSelectedItemId(R.id.navigation_recipes);
-                        break;
-                    case "Recipes":
-                        navView.setSelectedItemId(R.id.navigation_shopping_list);
-                        break;
-
-                    case "Shopping List":
-                        navView.setSelectedItemId(R.id.navigation_profile);
-                        break;
-
-                    case "Profile":
-                        navView.setSelectedItemId(R.id.navigation_inventory);
-                        break;
-                }
-                /*Toast.makeText(MainActivity.this,selectedItem.toString() , Toast.LENGTH_SHORT).show();*/
-
-            }
-            public void onSwipeBottom() {
-                /*Toast.makeText(MainActivity.this, "bottom", Toast.LENGTH_SHORT).show();*/
-            }
-
-        });
     }
 
     private int getSelectedItem(BottomNavigationView bottomNavigationView) {

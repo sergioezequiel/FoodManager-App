@@ -72,3 +72,64 @@ public class OnSwipeTouchListener implements OnTouchListener {
     public void onSwipeBottom() {
     }
 }
+
+ /* ISTO ADICIONA SE NA ATIVIDADE PARA FAZER O USO DA CLASS
+        final ConstraintLayout constraintLayout = this.findViewById(R.id.container);
+        constraintLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            public void onSwipeTop() {
+                *//*Toast.makeText(MainActivity.this, "top", Toast.LENGTH_SHORT).show();*//*
+            }
+
+            public void onSwipeRight() {
+
+                int selectedItemId = navView.getSelectedItemId();
+                MenuItem selectedItem = navView.getMenu().findItem(selectedItemId);
+
+                switch (selectedItem.toString()){
+                    case "Inventory":
+                        navView.setSelectedItemId(R.id.navigation_profile);
+                        break;
+                    case "Recipes":
+                        navView.setSelectedItemId(R.id.navigation_inventory);
+                        break;
+
+                    case "Shopping List":
+                        navView.setSelectedItemId(R.id.navigation_recipes);
+                        break;
+
+                    case "Profile":
+                        navView.setSelectedItemId(R.id.navigation_shopping_list);
+                        break;
+                }
+
+              *//*  Toast.makeText(MainActivity.this,"Right" , Toast.LENGTH_SHORT).show();*//*
+            }
+
+            public void onSwipeLeft() {
+                int selectedItemId = navView.getSelectedItemId();
+                MenuItem selectedItem = navView.getMenu().findItem(selectedItemId);
+
+                switch (selectedItem.toString()){
+                    case "Inventory":
+                        navView.setSelectedItemId(R.id.navigation_recipes);
+                        break;
+                    case "Recipes":
+                        navView.setSelectedItemId(R.id.navigation_shopping_list);
+                        break;
+
+                    case "Shopping List":
+                        navView.setSelectedItemId(R.id.navigation_profile);
+                        break;
+
+                    case "Profile":
+                        navView.setSelectedItemId(R.id.navigation_inventory);
+                        break;
+                }
+                *//*Toast.makeText(MainActivity.this,selectedItem.toString() , Toast.LENGTH_SHORT).show();*//*
+
+            }
+            public void onSwipeBottom() {
+                *//*Toast.makeText(MainActivity.this, "bottom", Toast.LENGTH_SHORT).show();*//*
+            }
+
+        });*/

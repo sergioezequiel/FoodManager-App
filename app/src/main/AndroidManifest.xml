@@ -11,7 +11,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_main"/>
         <activity
             android:name=".RegisterActivity"
             android:configChanges="orientation|screenSize"
