@@ -1,7 +1,5 @@
 package com.foodmanager;
 
-/* <Importar as bibliotecas> */
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,29 +23,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Random;
-/* </Importar as bibliotecas> */
 
 public class InventoryFragment extends Fragment {
 
-    /* <Criacao das variaveis> */
-    private FloatingActionButton fab_add, fab_scan, fab_manual;
-    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
+    private FloatingActionButton fabAdd, fabScan, fabManual;
+    private Animation fabOpen, fabClose, fabClock, fabAnticlock;
     private Boolean isOpen = false;
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
     private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
-    /* </Criacao das variaveis> */
 
     /* <Funçao de quando o fragmento esta ser criado> */
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View root = inflater.inflate(R.layout.fragment_inventory, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment_inventory, container, false);
     }
 
     @Override
@@ -61,45 +57,44 @@ public class InventoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        fab_add = view.findViewById(R.id.inventory_add);
-        fab_scan = view.findViewById(R.id.inventory_add_scan_product);
-        fab_manual = view.findViewById(R.id.inventory_add_manual_product);
-        inventoryRecyclerView = view.findViewById(R.id.inventory_recycler_view);
-        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
-        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
-        fab_clock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
-        fab_anticlock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_anticlock);
+        fabAdd = view.findViewById(R.id.inventoryAdd);
+        fabScan = view.findViewById(R.id.inventoryAddScanProduct);
+        fabManual = view.findViewById(R.id.inventoryAddManualProduct);
+        fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+        fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        fabClock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
+        fabAnticlock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_anticlock);
+        inventoryRecyclerView = view.findViewById(R.id.inventoryRecyclerView);
 
-        fab_add.setOnClickListener(new View.OnClickListener() {
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (isOpen) {
-                    fab_manual.startAnimation(fab_close);
-                    fab_scan.startAnimation(fab_close);
-                    fab_add.startAnimation(fab_anticlock);
-                    fab_manual.setClickable(false);
-                    fab_scan.setClickable(false);
+                    fabManual.startAnimation(fabClose);
+                    fabScan.startAnimation(fabClose);
+                    fabAdd.startAnimation(fabAnticlock);
+                    fabManual.setClickable(false);
+                    fabScan.setClickable(false);
                     isOpen = false;
                 } else {
-                    fab_manual.startAnimation(fab_open);
-                    fab_scan.startAnimation(fab_open);
-                    fab_add.startAnimation(fab_clock);
-                    fab_manual.setClickable(true);
-                    fab_scan.setClickable(true);
+                    fabManual.startAnimation(fabOpen);
+                    fabScan.startAnimation(fabOpen);
+                    fabAdd.startAnimation(fabClock);
+                    fabManual.setClickable(true);
+                    fabScan.setClickable(true);
                     isOpen = true;
                 }
             }
         });
 
-        fab_manual.setOnClickListener(new View.OnClickListener() {
+        fabManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 insertItem(0);
             }
         });
 
-        fab_scan.setOnClickListener(new View.OnClickListener() {
+        fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 inventoryAdapter.notifyDataSetChanged();
@@ -170,7 +165,7 @@ public class InventoryFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.search, menu);
