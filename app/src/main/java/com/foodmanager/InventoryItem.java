@@ -25,7 +25,6 @@ public class InventoryItem {
     }
 
     public String getProductDescription() {
-
         return productDescription;
     }
 

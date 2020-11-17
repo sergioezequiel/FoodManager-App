@@ -65,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/action_button_2"
+            app:layout_constraintStart_toEndOf="@+id/inventoryRemove"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.902" />
 
@@ -80,7 +80,7 @@
             app:srcCompat="@android:color/darker_gray" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_button_1"
+            android:id="@+id/inventoryEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -97,7 +97,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_button_2"
+            android:id="@+id/inventoryRemove"
             app:icon="@drawable/ic_baseline_delete_24"
             android:layout_width="wrap_content"
             android:backgroundTint="@color/nivel7"
@@ -108,8 +108,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="Delete"
-            app:layout_constraintStart_toEndOf="@+id/action_button_1"
-            app:layout_constraintTop_toTopOf="@+id/action_button_1" />
+            app:layout_constraintStart_toEndOf="@+id/inventoryEdit"
+            app:layout_constraintTop_toTopOf="@+id/inventoryEdit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

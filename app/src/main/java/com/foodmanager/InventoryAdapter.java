@@ -3,6 +3,7 @@ package com.foodmanager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     public interface OnItemClickListener{
         void onItemCLick(int position);
+        void onEditClick(int position);
+        void onDeleteClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -30,6 +33,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         public TextView productName;
         public TextView productDescription;
         public TextView productQuantity;
+        public Button productEditButton, productDeleteButton;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -38,6 +42,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             productName = itemView.findViewById(R.id.product_name);
             productDescription = itemView.findViewById(R.id.product_description);
             productQuantity = itemView.findViewById(R.id.product_quantity);
+            productEditButton = itemView.findViewById(R.id.inventoryEdit);
+            productDeleteButton = itemView.findViewById(R.id.inventoryRemove);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -46,6 +52,30 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
                             listener.onItemCLick(position);
+                        }
+                    }
+                }
+            });
+
+            productEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onEditClick(position);
+                        }
+                    }
+                }
+            });
+
+            productDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
                         }
                     }
                 }

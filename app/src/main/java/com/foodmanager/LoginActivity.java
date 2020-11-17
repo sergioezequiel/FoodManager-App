@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final FloatingActionButton fabLogin = findViewById(R.id.fabLogin);
+        FloatingActionButton fabLogin = findViewById(R.id.fabLogin);
         fabLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
