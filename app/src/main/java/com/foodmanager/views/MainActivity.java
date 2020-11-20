@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.views;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.foodmanager.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 

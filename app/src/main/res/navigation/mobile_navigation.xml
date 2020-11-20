@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_inventory"
-        android:name="com.foodmanager.InventoryFragment"
+        android:name="com.foodmanager.views.InventoryFragment"
         android:label="Inventory"
         tools:layout="@layout/fragment_inventory" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_recipes"
-        android:name="com.foodmanager.RecipesFragment"
+        android:name="com.foodmanager.views.RecipesFragment"
         android:label="Recipes"
         tools:layout="@layout/fragment_recipes" >
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/navigation_shopping_list"
-        android:name="com.foodmanager.ShoppingListFragment"
+        android:name="com.foodmanager.views.ShoppingListFragment"
         android:label="Shopping List"
         tools:layout="@layout/fragment_shopping_list" >
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.foodmanager.ProfileFragment"
+        android:name="com.foodmanager.views.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
         <action

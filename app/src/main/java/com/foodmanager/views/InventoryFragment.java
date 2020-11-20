@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.views;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,8 +22,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foodmanager.R;
+import com.foodmanager.adapters.InventoryAdapter;
+import com.foodmanager.models.InventoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 

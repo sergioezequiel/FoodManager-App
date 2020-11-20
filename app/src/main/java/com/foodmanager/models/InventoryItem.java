@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.models;
 
 public class InventoryItem {
 

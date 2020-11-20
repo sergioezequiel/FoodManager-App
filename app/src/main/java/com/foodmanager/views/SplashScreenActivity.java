@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.widget.ProgressBar;
+
+import com.foodmanager.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
     /* For Splash Screen Variable Gives Time */
@@ -46,5 +48,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 });
             }
         }).start();
+
     }
 }

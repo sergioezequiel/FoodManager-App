@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.foodmanager.models.InventoryItem;
+import com.foodmanager.R;
 
 import java.util.ArrayList;
 

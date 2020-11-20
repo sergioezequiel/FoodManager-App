@@ -1,4 +1,4 @@
-package com.foodmanager;
+package com.foodmanager.views;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
+import com.foodmanager.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RecipesFragment extends Fragment {
