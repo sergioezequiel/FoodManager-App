@@ -1,6 +1,7 @@
 todo inventory:
     -- recycler view para todos os produtos (xml)  [- activity_recipe_manual-]
     -- Atualizar o inventoryItem para os tipo de dados com a base de dados [- InventoryItem -]
+    -- adcionar a pagina xml para a dar scan ao bar code [- activity_recipe_scan -]
 
 todo recipe:
     -- recycler view and fab button para os filtros (xml)  [- fragment_recipe -]
