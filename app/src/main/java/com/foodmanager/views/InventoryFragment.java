@@ -3,6 +3,7 @@ package com.foodmanager.views;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -162,7 +163,9 @@ public class InventoryFragment extends Fragment {
         fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo: funcao para adicionar automaticamente o item
+                Intent registerIntent = new Intent(getContext(), ScanItemActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startActivity(registerIntent);
             }
         });
 

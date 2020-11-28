@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import com.foodmanager.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RecipesFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -25,8 +27,9 @@ public class RecipesFragment extends Fragment {
         return root;
     }
 
+    //Funcao para criar um menu de search
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.search, menu);
@@ -36,22 +39,17 @@ public class RecipesFragment extends Fragment {
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
         item.setActionView(searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Snackbar.make(getView(), query, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
+                return false;
             }
         });
     }
