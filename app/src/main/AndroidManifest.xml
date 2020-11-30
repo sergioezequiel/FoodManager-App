@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".views.ManualItemActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_scan_item"
+            android:parentActivityName=".views.MainActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".views.ScanItemActivity"
             android:configChanges="orientation|screenSize"

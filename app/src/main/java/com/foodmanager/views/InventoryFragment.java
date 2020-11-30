@@ -156,16 +156,18 @@ public class InventoryFragment extends Fragment {
         fabManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo: adicionar manualmente o item
+                Intent  intent = new Intent(getContext(), ManualItemActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startActivity(intent);
             }
         });
 
         fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent registerIntent = new Intent(getContext(), ScanItemActivity.class);
+                Intent intent = new Intent(getContext(), ScanItemActivity.class);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                startActivity(registerIntent);
+                startActivity(intent);
             }
         });
 

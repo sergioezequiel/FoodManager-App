@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">FoodMan</string>
     <string name="titulo_login">Login</string>
     <string name="register_titulo">Register</string>
     <string name="app_scan_item">Scan</string>
