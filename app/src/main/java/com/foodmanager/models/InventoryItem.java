@@ -1,5 +1,6 @@
 package com.foodmanager.models;
 
+// Table ItensDespensa
 public class InventoryItem {
 
     private int productImage;
@@ -13,6 +14,22 @@ public class InventoryItem {
         this.productImage = productImage;
         this.productName = productName;
         this.productDescription = productDescription;
+        this.productQuantity = productQuantity;
+    }
+
+    public void setProductImage(int productImage) {
+        this.productImage = productImage;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public void setProductQuantity(int productQuantity) {
         this.productQuantity = productQuantity;
     }
 
