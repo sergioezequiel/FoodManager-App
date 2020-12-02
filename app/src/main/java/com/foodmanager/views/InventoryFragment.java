@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
-import com.foodmanager.models.InventoryItem;
+import com.foodmanager.models.ItemDespensa;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class InventoryFragment extends Fragment {
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
+    private ArrayList<ItemDespensa> itensDespensa = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
 
     //Esta funcao inicia quando o fragmento é chamado para chamara o seu xml
@@ -56,7 +56,7 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        inventoryItems = new ArrayList<>(inventoryItems);
+        itensDespensa = new ArrayList<>(itensDespensa);
     }
 
     //Funcao é executada quando o fragmento é completamente creado
@@ -94,12 +94,13 @@ public class InventoryFragment extends Fragment {
 
         for (int i = 0; i < 10; i++) {
             final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
+            // TODO: Updated ItemDespensa model
+            //itensDespensa.add(0, new ItemDespensa(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-        inventoryAdapter = new InventoryAdapter(inventoryItems);
+        inventoryAdapter = new InventoryAdapter(itensDespensa);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
@@ -111,7 +112,7 @@ public class InventoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        inventoryItems.remove(position);
+                        itensDespensa.remove(position);
                         inventoryAdapter.notifyItemRemoved(position);
                         Toast.makeText(getContext(), "Item " + position + " foi removido.", Toast.LENGTH_SHORT).show();
                         break;
@@ -205,7 +206,8 @@ public class InventoryFragment extends Fragment {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        // TODO: Updated ItemDespensa model
+        //Toast.makeText(getContext(), "Item: "+ itensDespensa.get(position).getProductName(), Toast.LENGTH_SHORT).show();
     }
 
     //Funcao para criar um menu de search

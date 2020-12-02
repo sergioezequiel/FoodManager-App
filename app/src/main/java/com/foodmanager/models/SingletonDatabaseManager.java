@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class SingletonDatabaseManager {
     private static SingletonDatabaseManager instance = null;
-    private ArrayList<InventoryItem> inventoryItems;
+    private ArrayList<ItemDespensa> itensDespensa;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
         if(instance == null) {
@@ -17,6 +17,6 @@ public class SingletonDatabaseManager {
     }
 
     private SingletonDatabaseManager(Context context) {
-        inventoryItems = new ArrayList<>();
+        itensDespensa = new ArrayList<>();
     }
 }

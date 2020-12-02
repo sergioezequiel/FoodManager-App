@@ -11,14 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.foodmanager.models.InventoryItem;
+import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.R;
 
 import java.util.ArrayList;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
-    private final ArrayList<InventoryItem> InventoryList;
-    private final ArrayList<InventoryItem> InventoryListFull;
+    private final ArrayList<ItemDespensa> InventoryList;
+    private final ArrayList<ItemDespensa> InventoryListFull;
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener{
@@ -86,7 +86,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         }
     }
 
-    public InventoryAdapter(ArrayList<InventoryItem> inventoryList) {
+    public InventoryAdapter(ArrayList<ItemDespensa> inventoryList) {
         InventoryList = inventoryList;
         InventoryListFull = new ArrayList<>(InventoryList);
     }
@@ -100,12 +100,13 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        InventoryItem currentItem = InventoryList.get(position);
+        ItemDespensa currentItem = InventoryList.get(position);
 
-        holder.productImage.setImageResource(currentItem.getProductImage());
+        // TODO: Updated ItemDespensa model
+        /*holder.productImage.setImageResource(currentItem.getProductImage());
         holder.productName.setText(currentItem.getProductName());
         holder.productDescription.setText(currentItem.getProductDescription());
-        holder.productQuantity.setText("QTY: "+ currentItem.getProductQuantity());
+        holder.productQuantity.setText("QTY: "+ currentItem.getProductQuantity());*/
     }
 
     @Override
@@ -120,15 +121,16 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     private final Filter nameFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<InventoryItem> inventoryListFiltered = new ArrayList<>();
+            ArrayList<ItemDespensa> inventoryListFiltered = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 inventoryListFiltered.addAll(InventoryListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (InventoryItem item : InventoryListFull) {
-                    if (item.getProductName().toLowerCase().contains(filterPattern)) {
+                for (ItemDespensa item : InventoryListFull) {
+                    // TODO: Updated ItemDespensa model
+                    /*if (item.getProductName().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
-                    }
+                    }*/
                 }
             }
             FilterResults results = new FilterResults();
