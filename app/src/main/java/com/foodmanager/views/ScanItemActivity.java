@@ -1,49 +1,42 @@
 package com.foodmanager.views;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.bluetooth.le.ScanRecord;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.SparseArray;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.text.Html;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.foodmanager.R;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.Result;
 
-import java.io.IOException;
+import java.util.Objects;
 
 public class ScanItemActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
-    private CodeScannerView mCodeScannerView;
     private ToneGenerator toneGen1;
     private TextView barcodeText;
 
@@ -51,22 +44,24 @@ public class ScanItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_item);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.nivel6)));
 
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         barcodeText = findViewById(R.id.barcode_text);
 
-        FloatingActionButton fabResgister = findViewById(R.id.fabScanItem);
-        fabResgister.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = findViewById(R.id.fabScanItem);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ScanItemActivity.this, barcodeText.getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ScanItemActivity.this, barcodeText.getText(), Toast.LENGTH_SHORT).show();
+                addItemDialog(barcodeText.getText());
+
             }
         });
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 123);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 123);
         } else {
             startScanning();
         }
@@ -74,7 +69,7 @@ public class ScanItemActivity extends AppCompatActivity {
     }
 
     private void startScanning() {
-        mCodeScannerView = findViewById(R.id.scanner_view);
+        CodeScannerView mCodeScannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, mCodeScannerView);
         mCodeScanner.startPreview();   // this line is very important, as you will not be able to scan your code without this, you will only get blank screen
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -95,6 +90,7 @@ public class ScanItemActivity extends AppCompatActivity {
         mCodeScannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                barcodeText.setText("");
                 mCodeScanner.startPreview();
             }
         });
@@ -113,9 +109,63 @@ public class ScanItemActivity extends AppCompatActivity {
         }
     }
 
-    public void vibrateDevice(Context mContext){
-            Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(150);
+    public void vibrateDevice(Context mContext) {
+        Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(150);
     }
+
+    /*Edit Values Dialog*/
+    public void addItemDialog(CharSequence productName) {
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
+
+        final AlertDialog diag = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                .setCustomTitle(titleView)
+                .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setView(R.layout.alert_dialog_add_scan_inventory_body)
+                .create();
+        diag.show();
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(Objects.requireNonNull(diag.getWindow()).getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        diag.getWindow().setAttributes(lp);
+
+        /*Find views By Id*/
+        Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
+        Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
+        final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
+        TextView txtProductName = diag.findViewById(R.id.txt_alert_dialog_product_name);
+        txtProductName.setText(productName);
+
+        btnAddQty.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                int qty = Integer.parseInt((String) txtQty.getText());
+                qty += 1;
+                txtQty.setText(Integer.toString(qty));
+            }
+        });
+
+        btnRemoveQty.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                int qty = Integer.parseInt((String) txtQty.getText());
+                if (qty > 1)
+                    qty -= 1;
+                txtQty.setText(Integer.toString(qty));
+            }
+        });
+
+    }
+
 
 }

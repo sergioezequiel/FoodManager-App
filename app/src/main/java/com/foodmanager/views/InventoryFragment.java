@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class InventoryFragment extends Fragment {
@@ -211,6 +214,7 @@ public class InventoryFragment extends Fragment {
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
         Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        editInventoryDialog();
     }
 
     //Funcao para criar um menu de search
@@ -238,5 +242,35 @@ public class InventoryFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+
+
+    /*Edit Values Dialog*/
+    public void editInventoryDialog() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_body, null);
+
+        final AlertDialog diag = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme)
+                .setCustomTitle(titleView)
+                .setPositiveButton("Close & Set", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setView(R.layout.alert_dialog_edit_inventory_title)
+                .create();
+        diag.show();
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(Objects.requireNonNull(diag.getWindow()).getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        diag.getWindow().setAttributes(lp);
+
+        /*Find views By Id / Set Text*/
+        // etUpPressed = diag.findViewById(R.id.dual_chanel_ediText_up_pressed);
+
     }
 }
