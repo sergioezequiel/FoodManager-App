@@ -22,8 +22,4 @@ public class ProductItem {
         return productName;
     }
 
-    public String getProductDescription() {
-        return productDescription;
-    }
-
 }

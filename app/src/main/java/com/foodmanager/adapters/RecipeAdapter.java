@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
-import com.foodmanager.models.ProductItem;
 import com.foodmanager.models.RecipeItem;
 
 import java.util.ArrayList;
@@ -32,20 +31,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView productImage;
-        public TextView productName;
-        public TextView productDescription;
-        public TextView productQuantity;
-        public Button productAddButton;
+        public ImageView recipeImage;
+        public TextView recipeName;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            productImage = itemView.findViewById(R.id.product_image);
-            productName = itemView.findViewById(R.id.product_name);
-            productDescription = itemView.findViewById(R.id.product_description);
-            productQuantity = itemView.findViewById(R.id.product_quantity);
-            productAddButton = itemView.findViewById(R.id.inventoryEdit);
+            recipeImage = itemView.findViewById(R.id.recipe_image);
+            recipeName = itemView.findViewById(R.id.recipe_name);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -59,17 +52,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 }
             });
 
-            productAddButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onAddClick(position);
-                        }
-                    }
-                }
-            });
         }
     }
 
@@ -89,8 +71,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecipeItem currentItem = InventoryList.get(position);
 
-        holder.productImage.setImageResource(currentItem.getProductImage());
-        holder.productName.setText(currentItem.getProductName());
+        holder.recipeImage.setImageResource(currentItem.getRecipeImage());
+        holder.recipeName.setText(currentItem.getRecipeName());
     }
 
     @Override
@@ -111,7 +93,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (RecipeItem item : InventoryListFull) {
-                    if (item.getProductName().toLowerCase().contains(filterPattern)) {
+                    if (item.getRecipeName().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
                     }
                 }

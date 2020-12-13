@@ -91,7 +91,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         holder.productImage.setImageResource(currentItem.getProductImage());
         holder.productName.setText(currentItem.getProductName());
-        holder.productDescription.setText(currentItem.getProductDescription());
     }
 
     @Override
