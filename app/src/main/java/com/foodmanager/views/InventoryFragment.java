@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
-import com.foodmanager.models.InventoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +44,8 @@ public class InventoryFragment extends Fragment {
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
+    // TODO: modelo não existente
+    //private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
 
     //Esta funcao inicia quando o fragmento é chamado para chamara o seu xml
@@ -60,7 +60,8 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        inventoryItems = new ArrayList<>(inventoryItems);
+        // TODO: modelo não existente
+        //inventoryItems = new ArrayList<>(inventoryItems);
     }
 
     //Funcao é executada quando o fragmento é completamente creado
@@ -98,12 +99,14 @@ public class InventoryFragment extends Fragment {
 
         for (int i = 0; i < 10; i++) {
             final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
+            // TODO: modelo não existente
+            //inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-        inventoryAdapter = new InventoryAdapter(inventoryItems);
+        // TODO: modelo não existente
+        //inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
@@ -115,7 +118,8 @@ public class InventoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        inventoryItems.remove(position);
+                        // TODO: modelo não existente
+                        //inventoryItems.remove(position);
                         inventoryAdapter.notifyItemRemoved(position);
                         Toast.makeText(getContext(), "Item " + position + " foi removido.", Toast.LENGTH_SHORT).show();
                         break;
@@ -174,7 +178,8 @@ public class InventoryFragment extends Fragment {
             }
         });
 
-        inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
+        // TODO: modelo não existente
+        /*inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
                 //todo: pensar em alguma coisa mais util para a funcao de item click
@@ -189,7 +194,7 @@ public class InventoryFragment extends Fragment {
             public void onDeleteClick(int position) {
                 removeItem(position);
             }
-        });
+        });*/
 
         inventoryCallBack = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
@@ -213,7 +218,8 @@ public class InventoryFragment extends Fragment {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        // TODO: modelo não existente
+        //Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
         editInventoryDialog();
     }
 

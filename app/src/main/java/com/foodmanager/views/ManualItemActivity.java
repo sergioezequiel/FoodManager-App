@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.adapters.ProductAdapter;
-import com.foodmanager.models.InventoryItem;
 import com.foodmanager.models.ProductItem;
 import com.google.android.material.textfield.TextInputLayout;
 

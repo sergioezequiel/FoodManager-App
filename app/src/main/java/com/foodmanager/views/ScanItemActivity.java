@@ -12,6 +12,7 @@ import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +30,15 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.foodmanager.R;
+import com.foodmanager.listeners.ScannedBarcodeListener;
+import com.foodmanager.models.CodigoBarras;
+import com.foodmanager.models.SingletonDatabaseManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.Result;
 
 import java.util.Objects;
 
-public class ScanItemActivity extends AppCompatActivity {
+public class ScanItemActivity extends AppCompatActivity implements ScannedBarcodeListener {
 
     private CodeScanner mCodeScanner;
     private ToneGenerator toneGen1;
@@ -55,7 +59,7 @@ public class ScanItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(ScanItemActivity.this, barcodeText.getText(), Toast.LENGTH_SHORT).show();
-                addItemDialog(barcodeText.getText());
+                //addItemDialog(barcodeText.getText());
 
             }
         });
@@ -72,15 +76,18 @@ public class ScanItemActivity extends AppCompatActivity {
         CodeScannerView mCodeScannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, mCodeScannerView);
         mCodeScanner.startPreview();   // this line is very important, as you will not be able to scan your code without this, you will only get blank screen
+        SingletonDatabaseManager.getInstance(getApplicationContext()).setScannedBarcodeListener(this);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("Debug", "Decode");
                         barcodeText.setText(result.getText());
                         toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
                         vibrateDevice(getApplicationContext());
+                        SingletonDatabaseManager.getInstance(getApplicationContext()).getCodigoBarrasAPI(result.getText(), getApplicationContext());
                     }
                 });
             }
@@ -115,7 +122,7 @@ public class ScanItemActivity extends AppCompatActivity {
     }
 
     /*Edit Values Dialog*/
-    public void addItemDialog(CharSequence productName) {
+    /*public void addItemDialog(CharSequence productName) {
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
 
@@ -137,7 +144,7 @@ public class ScanItemActivity extends AppCompatActivity {
         lp.gravity = Gravity.CENTER;
         diag.getWindow().setAttributes(lp);
 
-        /*Find views By Id*/
+
         Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
         Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
         final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
@@ -165,7 +172,62 @@ public class ScanItemActivity extends AppCompatActivity {
             }
         });
 
+    }*/
+
+
+    @Override
+    public void openAddDialog(CodigoBarras barcode) {
+        Log.d("Debug", "Entrou no openAddDialog");
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
+
+        final AlertDialog diag = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                .setCustomTitle(titleView)
+                .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setView(R.layout.alert_dialog_add_scan_inventory_body)
+                .create();
+        diag.show();
+        Log.d("Debug", "Aberto o dialog");
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(Objects.requireNonNull(diag.getWindow()).getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        diag.getWindow().setAttributes(lp);
+
+
+        Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
+        Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
+        final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
+        TextView txtProductName = diag.findViewById(R.id.txt_alert_dialog_product_name);
+        TextView txtDescription = diag.findViewById(R.id.product_description);
+        txtProductName.setText(barcode.getNome());
+        txtDescription.setText(barcode.getMarca());
+
+        btnAddQty.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                int qty = Integer.parseInt((String) txtQty.getText());
+                qty += 1;
+                txtQty.setText(Integer.toString(qty));
+            }
+        });
+
+        btnRemoveQty.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                int qty = Integer.parseInt((String) txtQty.getText());
+                if (qty > 1)
+                    qty -= 1;
+                txtQty.setText(Integer.toString(qty));
+            }
+        });
     }
-
-
 }
