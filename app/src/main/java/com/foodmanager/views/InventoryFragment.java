@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
@@ -25,12 +27,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
-import com.foodmanager.models.ItemDespensa;
+import com.foodmanager.models.InventoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class InventoryFragment extends Fragment {
@@ -42,7 +45,7 @@ public class InventoryFragment extends Fragment {
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<ItemDespensa> itensDespensa = new ArrayList<>();
+    private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
 
     //Esta funcao inicia quando o fragmento é chamado para chamara o seu xml
@@ -57,7 +60,7 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        itensDespensa = new ArrayList<>(itensDespensa);
+        inventoryItems = new ArrayList<>(inventoryItems);
     }
 
     //Funcao é executada quando o fragmento é completamente creado
@@ -95,13 +98,12 @@ public class InventoryFragment extends Fragment {
 
         for (int i = 0; i < 10; i++) {
             final int random = new Random().nextInt(26) + 75;
-            // TODO: Updated ItemDespensa model
-            //itensDespensa.add(0, new ItemDespensa(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
+            inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-        inventoryAdapter = new InventoryAdapter(itensDespensa);
+        inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
@@ -113,7 +115,7 @@ public class InventoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        itensDespensa.remove(position);
+                        inventoryItems.remove(position);
                         inventoryAdapter.notifyItemRemoved(position);
                         Toast.makeText(getContext(), "Item " + position + " foi removido.", Toast.LENGTH_SHORT).show();
                         break;
@@ -211,8 +213,8 @@ public class InventoryFragment extends Fragment {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        // TODO: Updated ItemDespensa model
-        //Toast.makeText(getContext(), "Item: "+ itensDespensa.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        editInventoryDialog();
     }
 
     //Funcao para criar um menu de search
@@ -240,5 +242,35 @@ public class InventoryFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+
+
+    /*Edit Values Dialog*/
+    public void editInventoryDialog() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_body, null);
+
+        final AlertDialog diag = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme)
+                .setCustomTitle(titleView)
+                .setPositiveButton("Close & Set", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setView(R.layout.alert_dialog_edit_inventory_title)
+                .create();
+        diag.show();
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(Objects.requireNonNull(diag.getWindow()).getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        diag.getWindow().setAttributes(lp);
+
+        /*Find views By Id / Set Text*/
+        // etUpPressed = diag.findViewById(R.id.dual_chanel_ediText_up_pressed);
+
     }
 }

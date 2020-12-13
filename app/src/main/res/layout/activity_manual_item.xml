@@ -74,10 +74,12 @@
                     <AutoCompleteTextView
                         android:id="@+id/dropdown_text"
                         android:layout_width="match_parent"
-                        android:editable="false"
+                        android:cursorVisible="false"
+                        android:inputType="none"
+                        android:clickable="true"
+                        android:focusable="false"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
-                        android:inputType="text"
                         android:textColor="@color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
