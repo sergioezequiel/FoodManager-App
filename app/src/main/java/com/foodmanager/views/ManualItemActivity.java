@@ -13,7 +13,6 @@ import android.widget.AutoCompleteTextView;
 
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
-import com.foodmanager.models.InventoryItem;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -24,11 +23,12 @@ public class ManualItemActivity extends AppCompatActivity {
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
+    //private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView dropDownText;
 
+    // TODO: adaptar para os novos modelos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +64,12 @@ public class ManualItemActivity extends AppCompatActivity {
 
         for (int i = 0; i < 10; i++) {
             final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
+            //inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(this);
-        inventoryAdapter = new InventoryAdapter(inventoryItems);
+        //inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }

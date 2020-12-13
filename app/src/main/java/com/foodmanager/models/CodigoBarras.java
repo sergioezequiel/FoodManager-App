@@ -7,12 +7,14 @@ public class CodigoBarras {
     private String nome;
     private String marca;
     private float quantidade;
+    private int idproduto;
 
-    public CodigoBarras(int codigoBarras, String nome, String marca, float quantidade) {
+    public CodigoBarras(int codigoBarras, String nome, String marca, float quantidade, int idproduto) {
         this.codigoBarras = codigoBarras;
         this.nome = nome;
         this.marca = marca;
         this.quantidade = quantidade;
+        this.idproduto = idproduto;
     }
 
     public int getCodigoBarras() {
@@ -45,5 +47,13 @@ public class CodigoBarras {
 
     public void setQuantidade(float quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public int getIdproduto() {
+        return idproduto;
+    }
+
+    public void setIdproduto(int idproduto) {
+        this.idproduto = idproduto;
     }
 }

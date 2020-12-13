@@ -1,4 +1,4 @@
-package com.foodmanager.models;
+package com.foodmanager.listeners;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
