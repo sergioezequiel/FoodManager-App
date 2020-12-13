@@ -69,7 +69,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/nivel6"
+                android:backgroundTint="@android:color/transparent"
                 android:inputType="text"
                 android:textColor="@color/white" />
 
@@ -91,7 +91,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/nivel6"
+                android:backgroundTint="@android:color/transparent"
                 android:inputType="text"
                 android:textColor="@color/white" />
 
@@ -115,7 +115,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/nivel6"
+                android:backgroundTint="@android:color/transparent"
                 android:inputType="textPassword"
                 android:textColor="@color/white" />
 

@@ -1,0 +1,23 @@
+todo inventory:
+    -- recycler view para todos os produtos (xml)  [- activity_recipe_manual-]
+    -- Atualizar o inventoryItem para os tipo de dados com a base de dados [- InventoryItem -]
+    -- adcionar a pagina xml para a dar scan ao bar code [- activity_recipe_scan -]
+
+todo recipe:
+    -- recycler view and fab button para os filtros (xml)  [- fragment_recipe -]
+    -- adapter (java) [- RecipeListAdapter -]
+    -- desenhar a pagina de filtros (xml) [- fragment_recipe_filter -]
+    -- item (java) [- RecipeListItem -]
+    -- cardview (xml para os itens ) [- recipe_item -]
+
+todo shooplist:
+     -- recycler view (xml)  [- fragment_shopping_list -]
+     -- adapter (java) [- ShoopingListAdapter -]
+     -- item (java) [- ShoopingListItem -]
+     -- cardview (xml para os itens ) [- shopping_list_item -]
+
+todo profile:
+       -- recycler view (xml)  [- fragment_profile -]
+       -- adapter (java) [- ProfileListAdapter -]
+       -- item (java) [- ProfileListItem -]
+       -- cardview (xml para os itens ) [- profile_list_item -]
