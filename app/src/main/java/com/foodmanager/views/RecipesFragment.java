@@ -7,17 +7,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
-import com.google.android.material.snackbar.Snackbar;
+import com.foodmanager.adapters.ProductAdapter;
+import com.foodmanager.adapters.RecipeAdapter;
+import com.foodmanager.models.ProductItem;
+import com.foodmanager.models.RecipeItem;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class RecipesFragment extends Fragment {
+
+    private RecyclerView inventoryRecyclerView;
+    private RecipeAdapter inventoryAdapter;
+    private RecyclerView.LayoutManager inventoryLayoutManager;
+    private ArrayList<RecipeItem> inventoryItems = new ArrayList<>();
+    private ItemTouchHelper.SimpleCallback inventoryCallBack;
+    private TextInputLayout textInputLayout;
+    private AutoCompleteTextView dropDownText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,5 +71,20 @@ public class RecipesFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    //Funcao para perparar o recycler view e por os itens dentro
+    private void prepareRecyclerView() {
+
+        for (int i = 0; i < 10; i++) {
+            final int random = new Random().nextInt(26) + 75;
+            inventoryItems.add(0, new ProductItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---"));
+        }
+
+        inventoryRecyclerView.setHasFixedSize(true);
+        inventoryLayoutManager = new LinearLayoutManager(getContext());
+        inventoryAdapter = new RecipeAdapter(inventoryItems);
+        inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
+        inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
 }
