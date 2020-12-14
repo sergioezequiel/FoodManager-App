@@ -2,10 +2,13 @@ package com.foodmanager.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.foodmanager.R;
@@ -40,9 +43,18 @@ public class SplashScreenActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Intent loginIntent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                        SharedPreferences sharedPrefs = getSharedPreferences(LoginActivity.FOODMAN_SHARED_PREFS, Context.MODE_PRIVATE);
+                        Intent activity;
+
+                        if(sharedPrefs.getBoolean(LoginActivity.IS_LOGGED_IN, false)) {
+                            activity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                        }
+                        else {
+                            activity = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                        }
+
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        startActivity(loginIntent);
+                        startActivity(activity);
                         finish();
                     }
                 });
