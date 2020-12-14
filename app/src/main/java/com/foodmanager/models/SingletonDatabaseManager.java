@@ -13,10 +13,6 @@ import com.android.volley.toolbox.Volley;
 import com.foodmanager.jsonparsers.CodigoBarrasParser;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante a máquina em que isto está a ser corrido
     private static final String barcodeApi = "http://192.168.1.74/foodman/backend/web/api/codigosbarras";
