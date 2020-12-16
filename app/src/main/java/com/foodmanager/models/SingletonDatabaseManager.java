@@ -21,9 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SingletonDatabaseManager {
-    // TODO: Alterar o IP consoante a máquina em que isto está a ser corrido
-    private static final String barcodeApi = "http://192.168.43.134/foodman/backend/web/api/codigosbarras";
-    private static final String loginApi = "http://192.168.43.134/foodman/backend/web/api/user/login";
+    // TODO: Alterar o IP consoante onde a app é corrida
+    // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
+    private static final String barcodeApi = "http://10.0.2.2/foodman/backend/web/api/codigosbarras";
+    private static final String loginApi = "http://10.0.2.2/foodman/backend/web/api/user/login";
 
     private static SingletonDatabaseManager instance = null;
     private static RequestQueue volleyQueue;
