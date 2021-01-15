@@ -2,9 +2,12 @@ package com.foodmanager.views;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
+import com.foodmanager.listeners.DespensaListener;
+import com.foodmanager.models.ItemDespensa;
+import com.foodmanager.models.SingletonDatabaseManager;
+import com.foodmanager.models.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-public class InventoryFragment extends Fragment {
+public class InventoryFragment extends Fragment implements DespensaListener {
 
     //variaveis privadas
     private FloatingActionButton fabAdd, fabScan, fabManual;
@@ -44,8 +51,6 @@ public class InventoryFragment extends Fragment {
     private RecyclerView inventoryRecyclerView;
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    // TODO: modelo não existente
-    //private ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
 
     //Esta funcao inicia quando o fragmento é chamado para chamara o seu xml
@@ -79,6 +84,9 @@ public class InventoryFragment extends Fragment {
         
         //Adicionar o touch helper ao recycler view
         new ItemTouchHelper(inventoryCallBack).attachToRecyclerView(inventoryRecyclerView);
+
+        SingletonDatabaseManager.getInstance(getContext()).setDespensaListener(this);
+        SingletonDatabaseManager.getInstance(getContext()).getDespensa(getContext());
     }
 
     //Funcao para ir buscar todas as views pelo id
@@ -96,17 +104,8 @@ public class InventoryFragment extends Fragment {
 
     //Funcao para perparar o recycler view e por os itens dentro
     private void prepareRecyclerView(View view) {
-
-        for (int i = 0; i < 10; i++) {
-            final int random = new Random().nextInt(26) + 75;
-            // TODO: modelo não existente
-            //inventoryItems.add(0, new InventoryItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---", random));
-        }
-
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-        // TODO: modelo não existente
-        //inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
@@ -118,8 +117,6 @@ public class InventoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        // TODO: modelo não existente
-                        //inventoryItems.remove(position);
                         inventoryAdapter.notifyItemRemoved(position);
                         Toast.makeText(getContext(), "Item " + position + " foi removido.", Toast.LENGTH_SHORT).show();
                         break;
@@ -163,6 +160,10 @@ public class InventoryFragment extends Fragment {
         fabManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!Utils.isConnected(getContext())) {
+                    Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent  intent = new Intent(getContext(), ManualItemActivity.class);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
@@ -172,6 +173,10 @@ public class InventoryFragment extends Fragment {
         fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!Utils.isConnected(getContext())) {
+                    Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(getContext(), ScanItemActivity.class);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
@@ -244,7 +249,9 @@ public class InventoryFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                inventoryAdapter.getFilter().filter(newText);
+                if(inventoryAdapter != null) {
+                    inventoryAdapter.getFilter().filter(newText);
+                }
                 return false;
             }
         });
@@ -255,7 +262,7 @@ public class InventoryFragment extends Fragment {
     /*Edit Values Dialog*/
     public void editInventoryDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
-        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_body, null);
+        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_title, null);
 
         final AlertDialog diag = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme)
                 .setCustomTitle(titleView)
@@ -264,7 +271,7 @@ public class InventoryFragment extends Fragment {
 
                     }
                 })
-                .setView(R.layout.alert_dialog_edit_inventory_title)
+                .setView(R.layout.alert_dialog_edit_inventory_body)
                 .create();
         diag.show();
 
@@ -278,5 +285,12 @@ public class InventoryFragment extends Fragment {
         /*Find views By Id / Set Text*/
         // etUpPressed = diag.findViewById(R.id.dual_chanel_ediText_up_pressed);
 
+    }
+
+    @Override
+    public void onUpdateDespensa(ArrayList<ItemDespensa> despensa) {
+        Log.d("InventoryFragment", "onUpdateDespensa called");
+        inventoryAdapter = new InventoryAdapter(despensa);
+        inventoryRecyclerView.setAdapter(inventoryAdapter);
     }
 }

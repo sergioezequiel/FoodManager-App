@@ -1,38 +1,51 @@
 package com.foodmanager.models;
 
+import android.content.ClipData;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.foodmanager.R;
 import com.foodmanager.jsonparsers.CodigoBarrasParser;
+import com.foodmanager.jsonparsers.ItensDespensaParser;
 import com.foodmanager.jsonparsers.UserParser;
+import com.foodmanager.listeners.DespensaListener;
 import com.foodmanager.listeners.LoginListener;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String barcodeApi = "http://10.0.2.2/foodman/backend/web/api/codigosbarras";
-    private static final String loginApi = "http://10.0.2.2/foodman/backend/web/api/user/login";
+    private static final String WEBSITE_IP = "10.0.2.2";
+
+    private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
+    private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
+    private static final String despensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/despensa";
+    private static final String adicionarApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/adicionaritem";
 
     private static SingletonDatabaseManager instance = null;
+    private DatabaseHelper helper;
     private static RequestQueue volleyQueue;
     private String apikey;
 
     // Listeners
     private ScannedBarcodeListener scannedBarcodeListener;
     private LoginListener loginListener;
+    private DespensaListener despensaListener;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
         if(instance == null) {
@@ -44,7 +57,7 @@ public class SingletonDatabaseManager {
     }
 
     private SingletonDatabaseManager(Context context) {
-
+        helper = new DatabaseHelper(context);
     }
 
     public void getCodigoBarrasAPI(final String barcode, final Context context) {
@@ -59,16 +72,23 @@ public class SingletonDatabaseManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.noBarcodeToast, Toast.LENGTH_LONG).show();
+                }
             }
         });
-        Log.d("Debug", "Build do request");
+
+        Log.d("URL codigobarras", request.getUrl());
 
         volleyQueue.add(request);
-        Log.d("Debug", "Adicionou na queue");
     }
 
     public void login(final String email, final String password, final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         StringRequest request = new StringRequest(Request.Method.POST, loginApi, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -78,6 +98,8 @@ public class SingletonDatabaseManager {
                     Toast.makeText(context, R.string.errorLogin, Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                apikey = utilizador.getApikey();
 
                 loginListener.onLogin(utilizador);
             }
@@ -103,6 +125,89 @@ public class SingletonDatabaseManager {
         volleyQueue.add(request);
     }
 
+    public void getDespensa(final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+
+            if(despensaListener != null) {
+                despensaListener.onUpdateDespensa(helper.getItensDespensa());
+            }
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, despensaApi + "/" + apikey, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<ItemDespensa> despensa = ItensDespensaParser.jsonToItensDespensa(response);
+
+                despensaListener.onUpdateDespensa(despensa);
+                helper.removerTodosItensDespensa();
+                for (ItemDespensa item : despensa) {
+                    helper.adicionarItemDespensa(item);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.errorLogin, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        Log.d("Singleton", "URL do request: " + request.getUrl());
+
+        volleyQueue.add(request);
+    }
+
+    public void adicionarItem(final ItemDespensa item, final int idproduto, Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+
+            if(despensaListener != null) {
+                despensaListener.onUpdateDespensa(helper.getItensDespensa());
+            }
+            return;
+        }
+        Log.d("Pass", "Passou o check da internet e vai fazer o request");
+        StringRequest request = new StringRequest(Request.Method.POST, adicionarApi, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Respota add", response);
+                ItemDespensa temp = ItensDespensaParser.jsonToItemDespensa(response);
+                helper.adicionarItemDespensa(temp);
+
+                if(despensaListener != null) {
+                    despensaListener.onUpdateDespensa(helper.getItensDespensa());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nome", item.getNome());
+                params.put("quantidade", Float.toString(item.getQuantidade()));
+                params.put("validade", item.getValidade());
+                params.put("idproduto", Integer.toString(idproduto));
+                params.put("apikey", apikey);
+
+                return params;
+            }
+        };
+
+        volleyQueue.add(request);
+    }
+
+    public void setApikey(String apikey) {
+        this.apikey = apikey;
+    }
+
     // Setters dos listeners
 
     public void setScannedBarcodeListener(ScannedBarcodeListener scannedBarcodeListener) {
@@ -111,5 +216,9 @@ public class SingletonDatabaseManager {
 
     public void setLoginListener(LoginListener loginListener) {
         this.loginListener = loginListener;
+    }
+
+    public void setDespensaListener(DespensaListener despensaListener) {
+        this.despensaListener = despensaListener;
     }
 }

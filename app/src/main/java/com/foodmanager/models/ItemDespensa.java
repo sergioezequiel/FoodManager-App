@@ -5,20 +5,20 @@ public class ItemDespensa {
     private int idItemDespensa;
     private String nome;
     private float quantidade;
-    private long validade; // Ainda não tenho a certeza como vou guardar a data, por enquanto fica em Unix time
+    private String validade;
+    private String imagem;
+    private String unidade;
 
-    // Foreign Keys
-    private int idProduto;
-    private int idUtilizador;
-
-    public ItemDespensa(int idItemDespensa, String nome, float quantidade, long validade, int idProduto, int idUtilizador) {
+    public ItemDespensa(int idItemDespensa, String nome, float quantidade, String validade, String imagem, String unidade) {
         this.idItemDespensa = idItemDespensa;
         this.nome = nome;
         this.quantidade = quantidade;
         this.validade = validade;
-        this.idProduto = idProduto;
-        this.idUtilizador = idUtilizador;
+        this.imagem = imagem;
+        this.unidade = unidade;
     }
+
+    public ItemDespensa() {}
 
     public int getIdItemDespensa() {
         return idItemDespensa;
@@ -44,27 +44,27 @@ public class ItemDespensa {
         this.quantidade = quantidade;
     }
 
-    public long getValidade() {
+    public String getValidade() {
         return validade;
     }
 
-    public void setValidade(long validade) {
+    public void setValidade(String validade) {
         this.validade = validade;
     }
 
-    public int getIdProduto() {
-        return idProduto;
+    public String getImagem() {
+        return imagem;
     }
 
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
-    public int getIdUtilizador() {
-        return idUtilizador;
+    public String getUnidade() {
+        return unidade;
     }
 
-    public void setIdUtilizador(int idUtilizador) {
-        this.idUtilizador = idUtilizador;
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
     }
 }

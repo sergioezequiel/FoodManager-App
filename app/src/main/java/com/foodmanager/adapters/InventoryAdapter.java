@@ -11,8 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -91,22 +95,21 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         InventoryListFull = new ArrayList<>(InventoryList);
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inventory_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(v, clickListener);
-        return  viewHolder;
+        return new ViewHolder(v, clickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ItemDespensa currentItem = InventoryList.get(position);
 
-        // TODO: Updated ItemDespensa model
-        /*holder.productImage.setImageResource(currentItem.getProductImage());
-        holder.productName.setText(currentItem.getProductName());
-        holder.productDescription.setText(currentItem.getProductDescription());
-        holder.productQuantity.setText("QTY: "+ currentItem.getProductQuantity());*/
+        Glide.with(holder.productImage.getContext()).load(currentItem.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
+        holder.productName.setText(currentItem.getNome());
+        holder.productDescription.setText("Expires: " + currentItem.getValidade());
+        holder.productQuantity.setText("QTY: " + currentItem.getQuantidade() + " " + currentItem.getUnidade());
     }
 
     @Override
@@ -127,10 +130,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (ItemDespensa item : InventoryListFull) {
-                    // TODO: Updated ItemDespensa model
-                    /*if (item.getProductName().toLowerCase().contains(filterPattern)) {
+                    if (item.getNome().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
-                    }*/
+                    }
                 }
             }
             FilterResults results = new FilterResults();

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +30,12 @@ import androidx.core.content.ContextCompat;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 import com.foodmanager.models.CodigoBarras;
+import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.models.SingletonDatabaseManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.Result;
@@ -43,6 +47,8 @@ public class ScanItemActivity extends AppCompatActivity implements ScannedBarcod
     private CodeScanner mCodeScanner;
     private ToneGenerator toneGen1;
     private TextView barcodeText;
+
+    private TextView txtQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,62 +127,8 @@ public class ScanItemActivity extends AppCompatActivity implements ScannedBarcod
         v.vibrate(150);
     }
 
-    /*Edit Values Dialog*/
-    /*public void addItemDialog(CharSequence productName) {
-        LayoutInflater inflater = this.getLayoutInflater();
-        @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
-
-        final AlertDialog diag = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
-                .setCustomTitle(titleView)
-                .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                })
-                .setView(R.layout.alert_dialog_add_scan_inventory_body)
-                .create();
-        diag.show();
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(Objects.requireNonNull(diag.getWindow()).getAttributes());
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.gravity = Gravity.CENTER;
-        diag.getWindow().setAttributes(lp);
-
-
-        Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
-        Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
-        final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
-        TextView txtProductName = diag.findViewById(R.id.txt_alert_dialog_product_name);
-        txtProductName.setText(productName);
-
-        btnAddQty.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
-                int qty = Integer.parseInt((String) txtQty.getText());
-                qty += 1;
-                txtQty.setText(Integer.toString(qty));
-            }
-        });
-
-        btnRemoveQty.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
-                int qty = Integer.parseInt((String) txtQty.getText());
-                if (qty > 1)
-                    qty -= 1;
-                txtQty.setText(Integer.toString(qty));
-            }
-        });
-
-    }*/
-
-
     @Override
-    public void openAddDialog(CodigoBarras barcode) {
+    public void openAddDialog(final CodigoBarras barcode) {
         Log.d("Debug", "Entrou no openAddDialog");
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
@@ -185,7 +137,16 @@ public class ScanItemActivity extends AppCompatActivity implements ScannedBarcod
                 .setCustomTitle(titleView)
                 .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                       TextView quant = findViewById(R.id.txt_qty_item);
 
+                       Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_LONG).show();
+                       ItemDespensa newItem = new ItemDespensa();
+                       newItem.setNome(barcode.getNome() + " (" + barcode.getMarca() + ")");
+                       newItem.setQuantidade(barcode.getQuantidade() * Integer.parseInt(txtQty.getText().toString()));
+                       // TODO: update validade
+                       newItem.setValidade("2021-01-15");
+                       SingletonDatabaseManager.getInstance(getApplicationContext()).adicionarItem(newItem, barcode.getIdproduto(), getApplicationContext());
+                       finish();
                     }
                 })
                 .setView(R.layout.alert_dialog_add_scan_inventory_body)
@@ -203,11 +164,13 @@ public class ScanItemActivity extends AppCompatActivity implements ScannedBarcod
 
         Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
         Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
-        final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
+        txtQty = diag.findViewById(R.id.txt_qty_item);
         TextView txtProductName = diag.findViewById(R.id.txt_alert_dialog_product_name);
         TextView txtDescription = diag.findViewById(R.id.product_description);
+        ImageView productImage = diag.findViewById(R.id.product_image);
         txtProductName.setText(barcode.getNome());
         txtDescription.setText(barcode.getMarca());
+        Glide.with(getApplicationContext()).load(barcode.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(productImage);
 
         btnAddQty.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")

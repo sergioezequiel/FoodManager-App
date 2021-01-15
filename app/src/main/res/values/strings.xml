@@ -4,4 +4,6 @@
     <string name="register_titulo">Register</string>
     <string name="app_scan_item">Scan</string>
     <string name="errorLogin">Invalid Email or Password.</string>
+    <string name="noBarcodeToast">Sorry, but we don\'t recognize this barcode on our database.</string>
+    <string name="noInternet">You are not connected to the internet.</string>
 </resources>

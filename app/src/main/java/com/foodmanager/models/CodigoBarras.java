@@ -7,14 +7,18 @@ public class CodigoBarras {
     private String nome;
     private String marca;
     private float quantidade;
+
+    private String imagem;
+
     private int idproduto;
 
-    public CodigoBarras(int codigoBarras, String nome, String marca, float quantidade, int idproduto) {
+    public CodigoBarras(int codigoBarras, String nome, String marca, float quantidade, int idproduto, String imagem) {
         this.codigoBarras = codigoBarras;
         this.nome = nome;
         this.marca = marca;
         this.quantidade = quantidade;
         this.idproduto = idproduto;
+        this.imagem = imagem;
     }
 
     public int getCodigoBarras() {
@@ -55,5 +59,13 @@ public class CodigoBarras {
 
     public void setIdproduto(int idproduto) {
         this.idproduto = idproduto;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

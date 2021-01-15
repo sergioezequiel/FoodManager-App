@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.foodmanager.R;
+import com.foodmanager.models.SingletonDatabaseManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
     /* For Splash Screen Variable Gives Time */
@@ -47,6 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         Intent activity;
 
                         if(sharedPrefs.getBoolean(LoginActivity.IS_LOGGED_IN, false)) {
+                            SingletonDatabaseManager.getInstance(getApplicationContext()).setApikey(sharedPrefs.getString(LoginActivity.APIKEY, ""));
                             activity = new Intent(SplashScreenActivity.this, MainActivity.class);
                         }
                         else {

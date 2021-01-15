@@ -17,7 +17,8 @@ public class CodigoBarrasParser {
                     barcode.getString("nome"),
                     barcode.getString("marca"),
                     (float) barcode.getDouble("quantidade"),
-                    barcode.getInt("idproduto"));
+                    barcode.getInt("idproduto"),
+                    barcode.getString("imagem"));
         }
         catch (JSONException e) {
             e.printStackTrace();
