@@ -6,4 +6,8 @@
     <string name="errorLogin">Invalid Email or Password.</string>
     <string name="noBarcodeToast">Sorry, but we don\'t recognize this barcode on our database.</string>
     <string name="noInternet">You are not connected to the internet.</string>
+    <string name="app_AddItem_item">Add Item</string>
+    <string name="app_webPage_item">Webrowser</string>
+    <string name="title_activity_recipes_details">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

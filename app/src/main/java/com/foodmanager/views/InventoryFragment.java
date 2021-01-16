@@ -183,8 +183,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
             }
         });
 
-        // TODO: modelo não existente
-        /*inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
+        inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
                 //todo: pensar em alguma coisa mais util para a funcao de item click
@@ -199,7 +198,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
             public void onDeleteClick(int position) {
                 removeItem(position);
             }
-        });*/
+        });
 
         inventoryCallBack = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
@@ -223,8 +222,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        // TODO: modelo não existente
-        //Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
         editInventoryDialog();
     }
 

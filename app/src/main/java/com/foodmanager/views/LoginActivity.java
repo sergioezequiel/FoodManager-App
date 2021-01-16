@@ -1,10 +1,13 @@
 package com.foodmanager.views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -71,5 +74,16 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         startActivity(mainIntent);
         finish();
+                openChromeCustomTabs("http://192.168.1.82/foodman/frontend/web/site/signup");
+            }
+        });
+
+    }
+    private void openChromeCustomTabs(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        CustomTabsIntent intent = builder.build();
+        intent.launchUrl(this, Uri.parse(url));
     }
 }

@@ -1,6 +1,9 @@
 package com.foodmanager.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +19,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.foodmanager.R;
+import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.adapters.ProductAdapter;
 import com.foodmanager.adapters.RecipeAdapter;
 import com.foodmanager.models.ProductItem;
@@ -37,7 +42,6 @@ public class RecipesFragment extends Fragment {
     private ArrayList<RecipeItem> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
-    private AutoCompleteTextView dropDownText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,10 +54,19 @@ public class RecipesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         inventoryRecyclerView = view.findViewById(R.id.recipeRecyclerView);
-
         prepareRecyclerView();
+        inventoryAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemCLick(int position) {
+                Intent intent = new Intent(getContext(), RecipesDetailsActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                intent.putExtra("POS", position);
+                startActivity(intent);
+            }
+        });
+
     }
 
     //Funcao para criar um menu de search
@@ -77,7 +90,7 @@ public class RecipesFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                inventoryAdapter.getFilter().filter(newText);
                 return false;
             }
         });
