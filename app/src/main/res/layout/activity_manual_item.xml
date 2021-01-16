@@ -44,11 +44,12 @@
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name:"
+                    android:hint="@string/name"
                     android:textColorHint="@color/white"
                     app:layout_constraintTop_toBottomOf="@id/editTextNickname">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nomeProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -63,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/white"
                     app:endIconTint="@color/white"
-                    android:hint="Enter Your Name"
+                    android:hint="@string/category"
                     app:endIconMode="dropdown_menu"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -83,14 +84,6 @@
                         android:textColor="@color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Procurar"
-                    tools:layout_editor_absoluteX="60dp"
-                    tools:layout_editor_absoluteY="90dp" />
 
             </LinearLayout>
 

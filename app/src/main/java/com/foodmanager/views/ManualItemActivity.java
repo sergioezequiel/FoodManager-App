@@ -10,36 +10,55 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.adapters.ProductAdapter;
+import com.foodmanager.listeners.ManualItemListener;
+import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.models.ProductItem;
+import com.foodmanager.models.Produto;
+import com.foodmanager.models.SingletonDatabaseManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-public class ManualItemActivity extends AppCompatActivity {
+public class ManualItemActivity extends AppCompatActivity implements ManualItemListener {
 
     private RecyclerView inventoryRecyclerView;
     private ProductAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<ProductItem> inventoryItems = new ArrayList<>();
+    private ArrayList<Produto> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView dropDownText;
+    private ArrayList<String> categorias;
 
+    // Dialog adicionar
+    private EditText productName, productQty;
+    private DatePicker validade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,42 +73,37 @@ public class ManualItemActivity extends AppCompatActivity {
         textInputLayout = findViewById(R.id.text_input_layout);
         dropDownText = findViewById(R.id.dropdown_text);
 
-        String[] items = new String[]{
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Others"
-        };
+        SingletonDatabaseManager.getInstance(getApplicationContext()).setManualItemListener(this);
+        SingletonDatabaseManager.getInstance(getApplicationContext()).getCategoriasString(getApplicationContext());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                ManualItemActivity.this,
-                R.layout.dropdown_item,
-                items
-        );
-
-        dropDownText.setAdapter(adapter);
-
-        inventoryAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
+        dropDownText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemCLick(int position) {
-                //todo: pensar em alguma coisa mais util para a funcao de item click
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SingletonDatabaseManager.getInstance(getApplicationContext()).getProdutosPelaCategoria(categorias.get(position), getApplicationContext());
+            }
+        });
+
+        EditText etTest = findViewById(R.id.nomeProduct);
+        etTest.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onAddClick(int position) {
-                addItemDialog(inventoryItems.get(position).getProductName());
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                inventoryAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
 
     //Funcao para perparar o recycler view e por os itens dentro
     private void prepareRecyclerView() {
-
-        for (int i = 0; i < 10; i++) {
-            final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new ProductItem(R.drawable.ic_baseline_add_24, "New: " + random, "Description: ---"));
-        }
-
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(this);
         inventoryAdapter = new ProductAdapter(inventoryItems);
@@ -98,7 +112,7 @@ public class ManualItemActivity extends AppCompatActivity {
     }
 
     /*Edit Values Dialog*/
-    public void addItemDialog(CharSequence productName) {
+    public void addItemDialog(Produto produto) {
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View titleView = inflater.inflate(R.layout.alert_dialog_add_scan_inventory_title, null);
 
@@ -106,10 +120,24 @@ public class ManualItemActivity extends AppCompatActivity {
                 .setCustomTitle(titleView)
                 .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        ItemDespensa newItem = new ItemDespensa();
+                        newItem.setNome(productName.getText().toString());
+                        newItem.setQuantidade(Float.parseFloat(productQty.getText().toString()));
+                        newItem.setValidade(validade.getYear() + "-" + (validade.getMonth() + 1) + "-" + validade.getDayOfMonth());
+                        Log.d("nome", newItem.getNome());
+                        Log.d("quant", newItem.getQuantidade() + "");
+                        Log.d("validade", newItem.getValidade());
+                        Log.d("ID produto", produto.getIdProduto() + "");
+                        SingletonDatabaseManager.getInstance(getApplicationContext()).adicionarItem(newItem, produto.getIdProduto(), getApplicationContext());
+                        finish();
+                    }
+                })
+                .setNegativeButton(Html.fromHtml("<font color='#FEB117'><strong>Cancel</font>"), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
                     }
                 })
-                .setView(R.layout.alert_dialog_add_scan_inventory_body)
+                .setView(R.layout.alert_dialog_edit_inventory_body)
                 .create();
         diag.show();
 
@@ -120,33 +148,34 @@ public class ManualItemActivity extends AppCompatActivity {
         lp.gravity = Gravity.CENTER;
         diag.getWindow().setAttributes(lp);
 
-        /*Find views By Id*/
-        Button btnAddQty = diag.findViewById(R.id.btn_alert_dialog_add_item_qty);
-        Button btnRemoveQty = diag.findViewById(R.id.btn_alert_dialog_remove_item_qty);
-        final TextView txtQty = diag.findViewById(R.id.txt_qty_item);
-        TextView txtProductName = diag.findViewById(R.id.txt_alert_dialog_product_name);
-        txtProductName.setText(productName);
+        productName = diag.findViewById(R.id.etProductName);
+        productQty = diag.findViewById(R.id.etQuant);
+        validade = diag.findViewById(R.id.datePicker1);
+        ImageView img = diag.findViewById(R.id.imageView);
 
-        btnAddQty.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
+        Glide.with(getApplicationContext()).load(produto.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        productName.setText(produto.getNome());
+    }
+
+    @Override
+    public void onChangeCategory(ArrayList<Produto> produtos) {
+        Log.d("Listener", "onChangeCategory called");
+        inventoryAdapter = new ProductAdapter(produtos);
+        inventoryRecyclerView.setAdapter(inventoryAdapter);
+        inventoryAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                int qty = Integer.parseInt((String) txtQty.getText());
-                qty += 1;
-                txtQty.setText(Integer.toString(qty));
+            public void onItemCLick(int position) {
+                addItemDialog(produtos.get(position));
             }
         });
+        inventoryItems = produtos;
+    }
 
-        btnRemoveQty.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
-                int qty = Integer.parseInt((String) txtQty.getText());
-                if (qty > 1)
-                    qty -= 1;
-                txtQty.setText(Integer.toString(qty));
-            }
-        });
-
+    @Override
+    public void onGetCategorias(ArrayList<String> categorias) {
+        Log.d("Listener", "onGetCategorias called");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ManualItemActivity.this, R.layout.dropdown_item, categorias);
+        this.categorias = categorias;
+        dropDownText.setAdapter(adapter);
     }
 }

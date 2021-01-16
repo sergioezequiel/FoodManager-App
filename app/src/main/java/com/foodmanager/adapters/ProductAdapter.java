@@ -1,5 +1,6 @@
 package com.foodmanager.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +12,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
+import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.models.ProductItem;
+import com.foodmanager.models.Produto;
 
 
 import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
-    private final ArrayList<ProductItem> InventoryList;
-    private final ArrayList<ProductItem> InventoryListFull;
+    private final ArrayList<Produto> InventoryList;
+    private final ArrayList<Produto> InventoryListFull;
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener{
         void onItemCLick(int position);
-        void onAddClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -58,22 +62,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }
                 }
             });
-
-            productAddButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onAddClick(position);
-                        }
-                    }
-                }
-            });
         }
     }
 
-    public ProductAdapter(ArrayList<ProductItem> inventoryList) {
+    public ProductAdapter(ArrayList<Produto> inventoryList) {
         InventoryList = inventoryList;
         InventoryListFull = new ArrayList<>(InventoryList);
     }
@@ -87,10 +79,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductItem currentItem = InventoryList.get(position);
+        Produto currentItem = InventoryList.get(position);
 
-        holder.productImage.setImageResource(currentItem.getProductImage());
-        holder.productName.setText(currentItem.getProductName());
+        Glide.with(holder.productImage.getContext()).load(currentItem.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
+        Log.d("Imagem", currentItem.getImagem());
+        holder.productName.setText(currentItem.getNome());
     }
 
     @Override
@@ -105,13 +98,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private final Filter nameFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<ProductItem> inventoryListFiltered = new ArrayList<>();
+            ArrayList<Produto> inventoryListFiltered = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 inventoryListFiltered.addAll(InventoryListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (ProductItem item : InventoryListFull) {
-                    if (item.getProductName().toLowerCase().contains(filterPattern)) {
+                for (Produto item : InventoryListFull) {
+                    if (item.getNome().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
                     }
                 }

@@ -61,7 +61,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
-            android:hint="E-mail:"
+            android:hint="@string/email"
             android:foregroundTint="@color/white"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/nivel6"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
-                android:inputType="text"
+                android:inputType="textWebEmailAddress|text"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +86,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
-            android:hint="Password:"
+            android:hint="@string/password"
             android:textColorHint="@color/white"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/white"

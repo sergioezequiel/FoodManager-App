@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -261,8 +262,13 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                         ItemDespensa editedItem = item;
                         editedItem.setNome(txtNameEdit.getText().toString());
                         editedItem.setQuantidade(Float.parseFloat(txtQuantidadeEdit.getText().toString()));
-                        editedItem.setValidade(validade.getYear() + "-" + validade.getMonth() + "-" + validade.getDayOfMonth());
+                        editedItem.setValidade(validade.getYear() + "-" + (validade.getMonth() + 1) + "-" + validade.getDayOfMonth());
                         SingletonDatabaseManager.getInstance(getContext()).editarItem(editedItem, getContext());
+                    }
+                })
+                .setNegativeButton(Html.fromHtml("<font color='#FEB117'><strong>Cancel</font>"), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
                     }
                 })
                 .setView(R.layout.alert_dialog_edit_inventory_body)
@@ -285,7 +291,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         txtNameEdit.setText(item.getNome());
         txtQuantidadeEdit.setText(item.getQuantidade() + "");
         Glide.with(getContext()).load(item.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(imagem);
-        validade.updateDate(Integer.parseInt(dataValidade[0]), Integer.parseInt(dataValidade[1]), Integer.parseInt(dataValidade[2]));
+        validade.updateDate(Integer.parseInt(dataValidade[0]), Integer.parseInt(dataValidade[1]) - 1, Integer.parseInt(dataValidade[2]));
 
         /*Find views By Id / Set Text*/
         // etUpPressed = diag.findViewById(R.id.dual_chanel_ediText_up_pressed);

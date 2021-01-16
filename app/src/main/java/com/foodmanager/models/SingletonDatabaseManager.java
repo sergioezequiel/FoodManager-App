@@ -14,11 +14,14 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.foodmanager.R;
+import com.foodmanager.jsonparsers.CategoriasParser;
 import com.foodmanager.jsonparsers.CodigoBarrasParser;
 import com.foodmanager.jsonparsers.ItensDespensaParser;
+import com.foodmanager.jsonparsers.ProdutosParser;
 import com.foodmanager.jsonparsers.UserParser;
 import com.foodmanager.listeners.DespensaListener;
 import com.foodmanager.listeners.LoginListener;
+import com.foodmanager.listeners.ManualItemListener;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 
 import org.json.JSONArray;
@@ -37,6 +40,8 @@ public class SingletonDatabaseManager {
     private static final String despensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/despensa";
     private static final String adicionarApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/adicionaritem";
     private static final String defaultDespensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa";
+    private static final String produtosCategoriaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/produtos/pelacategoria";
+    private static final String categoriasApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/categorias";
 
     private static SingletonDatabaseManager instance = null;
     private DatabaseHelper helper;
@@ -47,6 +52,7 @@ public class SingletonDatabaseManager {
     private ScannedBarcodeListener scannedBarcodeListener;
     private LoginListener loginListener;
     private DespensaListener despensaListener;
+    private ManualItemListener manualItemListener;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
         if(instance == null) {
@@ -272,6 +278,60 @@ public class SingletonDatabaseManager {
         volleyQueue.add(request);
     }
 
+    public void getCategoriasString(final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, categoriasApi, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<String> categorias = CategoriasParser.jsonToStringArray(response);
+
+                if(manualItemListener != null) {
+                    manualItemListener.onGetCategorias(categorias);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getProdutosPelaCategoria(String categoria, final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, produtosCategoriaApi + "/" + categoria, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Produto> produtos = ProdutosParser.jsonToProdutos(response);
+
+                if(manualItemListener != null) {
+                    manualItemListener.onChangeCategory(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
     public void setApikey(String apikey) {
         this.apikey = apikey;
     }
@@ -288,5 +348,9 @@ public class SingletonDatabaseManager {
 
     public void setDespensaListener(DespensaListener despensaListener) {
         this.despensaListener = despensaListener;
+    }
+
+    public void setManualItemListener(ManualItemListener manualItemListener) {
+        this.manualItemListener = manualItemListener;
     }
 }
