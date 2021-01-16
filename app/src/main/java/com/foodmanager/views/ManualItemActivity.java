@@ -1,5 +1,6 @@
 package com.foodmanager.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,7 +11,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.foodmanager.R;
@@ -40,7 +44,7 @@ public class ManualItemActivity extends AppCompatActivity {
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView dropDownText;
-
+    private TextInputLayout editTextEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,9 @@ public class ManualItemActivity extends AppCompatActivity {
                 addItemDialog(inventoryItems.get(position).getProductName());
             }
         });
+
+        editTextEmail = findViewById(R.id.editTextEmail);
+
     }
 
     //Funcao para perparar o recycler view e por os itens dentro

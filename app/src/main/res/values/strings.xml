@@ -7,4 +7,6 @@
     <string name="app_webPage_item">Webrowser</string>
     <string name="title_activity_recipes_details">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="ingredientes">• Ingredientes:</string>
+    <string name="receita">• Receita</string>
 </resources>

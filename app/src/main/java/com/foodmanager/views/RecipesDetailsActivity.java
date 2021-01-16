@@ -34,7 +34,7 @@ public class RecipesDetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, pos, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, pos+"", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

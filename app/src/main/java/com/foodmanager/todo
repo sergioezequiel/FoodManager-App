@@ -21,3 +21,6 @@ todo profile:
        -- adapter (java) [- ProfileListAdapter -]
        -- item (java) [- ProfileListItem -]
        -- cardview (xml para os itens ) [- profile_list_item -]
+
+
+todo refazer os laytodos de acordo com o novo tema
