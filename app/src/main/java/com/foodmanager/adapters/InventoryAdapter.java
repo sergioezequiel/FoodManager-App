@@ -1,5 +1,6 @@
 package com.foodmanager.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
-    private final ArrayList<ItemDespensa> InventoryList;
+    public final ArrayList<ItemDespensa> InventoryList;
     private final ArrayList<ItemDespensa> InventoryListFull;
     private OnItemClickListener clickListener;
 
@@ -67,7 +68,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             productEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("Botoes", "Entrou no botao");
                     if (listener != null){
+                        Log.d("Botoes", "Passou no listener");
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
                             listener.onEditClick(position);

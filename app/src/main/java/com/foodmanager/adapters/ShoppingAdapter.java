@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
-import com.foodmanager.models.InventoryItem;
 import com.foodmanager.models.ShoppingItem;
 
 import java.util.ArrayList;

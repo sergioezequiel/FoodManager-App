@@ -30,12 +30,13 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "10.0.2.2";
+    private static final String WEBSITE_IP = "192.168.1.74";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
     private static final String despensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/despensa";
     private static final String adicionarApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/adicionaritem";
+    private static final String defaultDespensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa";
 
     private static SingletonDatabaseManager instance = null;
     private DatabaseHelper helper;
@@ -196,6 +197,73 @@ public class SingletonDatabaseManager {
                 params.put("validade", item.getValidade());
                 params.put("idproduto", Integer.toString(idproduto));
                 params.put("apikey", apikey);
+
+                return params;
+            }
+        };
+
+        volleyQueue.add(request);
+    }
+
+    public void eliminarItem(final int iditem, final int position, Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+
+            if(despensaListener != null) {
+                despensaListener.onUpdateDespensa(helper.getItensDespensa());
+            }
+            return;
+        }
+        StringRequest request = new StringRequest(Request.Method.DELETE, defaultDespensaApi + "/" + iditem, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                helper.removerItemDespensa(iditem);
+
+                if(despensaListener != null) {
+                    despensaListener.onDelete(position);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void editarItem(ItemDespensa item, Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+
+            if(despensaListener != null) {
+                despensaListener.onUpdateDespensa(helper.getItensDespensa());
+            }
+            return;
+        }
+        StringRequest request = new StringRequest(Request.Method.PUT, defaultDespensaApi + "/" + item.getIdItemDespensa(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                helper.editarItemDespensa(item);
+
+                if(despensaListener != null) {
+                    despensaListener.onUpdateDespensa(helper.getItensDespensa());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nome", item.getNome());
+                params.put("quantidade", Float.toString(item.getQuantidade()));
+                params.put("validade", item.getValidade());
 
                 return params;
             }

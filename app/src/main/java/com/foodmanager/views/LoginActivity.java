@@ -51,9 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         fabResgister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                startActivity(registerIntent);
+                openChromeCustomTabs("http://192.168.1.74/foodman/frontend/web/site/signup");
             }
         });
 
@@ -74,11 +72,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         startActivity(mainIntent);
         finish();
-                openChromeCustomTabs("http://192.168.1.82/foodman/frontend/web/site/signup");
-            }
-        });
-
     }
+
+
     private void openChromeCustomTabs(String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));

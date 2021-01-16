@@ -137,8 +137,6 @@ public class ScanItemActivity extends AppCompatActivity implements ScannedBarcod
                 .setCustomTitle(titleView)
                 .setPositiveButton(Html.fromHtml("<font color='#FEB117'><strong>Add Item</font>"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                       TextView quant = findViewById(R.id.txt_qty_item);
-
                        Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_LONG).show();
                        ItemDespensa newItem = new ItemDespensa();
                        newItem.setNome(barcode.getNome() + " (" + barcode.getMarca() + ")");

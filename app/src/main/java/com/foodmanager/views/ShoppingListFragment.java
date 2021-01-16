@@ -22,7 +22,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.foodmanager.R;
 import com.foodmanager.adapters.RecipeAdapter;
 import com.foodmanager.adapters.ShoppingAdapter;
-import com.foodmanager.models.InventoryItem;
 import com.foodmanager.models.RecipeItem;
 import com.foodmanager.models.ShoppingItem;
 import com.google.android.material.textfield.TextInputLayout;

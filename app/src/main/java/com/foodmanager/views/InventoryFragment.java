@@ -18,6 +18,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.listeners.DespensaListener;
@@ -35,6 +41,7 @@ import com.foodmanager.models.ItemDespensa;
 import com.foodmanager.models.SingletonDatabaseManager;
 import com.foodmanager.models.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,11 +60,16 @@ public class InventoryFragment extends Fragment implements DespensaListener {
     private RecyclerView.LayoutManager inventoryLayoutManager;
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
 
+    // Dialog Edit
+    private EditText txtNameEdit, txtQuantidadeEdit;
+    private DatePicker validade;
+
     //Esta funcao inicia quando o fragmento é chamado para chamara o seu xml
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        inventoryAdapter = new InventoryAdapter(new ArrayList<ItemDespensa>());
         return inflater.inflate(R.layout.fragment_inventory, container, false);
     }
 
@@ -117,20 +129,18 @@ public class InventoryFragment extends Fragment implements DespensaListener {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        inventoryAdapter.notifyItemRemoved(position);
-                        Toast.makeText(getContext(), "Item " + position + " foi removido.", Toast.LENGTH_SHORT).show();
+                        SingletonDatabaseManager.getInstance(getContext()).eliminarItem(inventoryAdapter.InventoryList.get(position).getIdItemDespensa(), position, getContext());
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
                         inventoryAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Tem a certeza?").setPositiveButton("Sim", dialogClickListener)
+        builder.setIcon(R.drawable.ic_eliminar).setTitle("Eliminar Item").setMessage("Tem a certeza que quer eliminar o item " + inventoryAdapter.InventoryList.get(position).getNome() + "?").setPositiveButton("Sim", dialogClickListener)
                 .setNegativeButton("Não", dialogClickListener).show();
     }
 
@@ -183,22 +193,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
             }
         });
 
-        inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
-            @Override
-            public void onItemCLick(int position) {
-                //todo: pensar em alguma coisa mais util para a funcao de item click
-            }
 
-            @Override
-            public void onEditClick(int position) { 
-                editItem(position);
-            }
-
-            @Override
-            public void onDeleteClick(int position) {
-                removeItem(position);
-            }
-        });
 
         inventoryCallBack = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
@@ -222,8 +217,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
-        editInventoryDialog();
+        editInventoryDialog(inventoryAdapter.InventoryList.get(position));
     }
 
     //Funcao para criar um menu de search
@@ -255,18 +249,20 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         });
     }
 
-
-
     /*Edit Values Dialog*/
-    public void editInventoryDialog() {
+    public void editInventoryDialog(ItemDespensa item) {
         LayoutInflater inflater = this.getLayoutInflater();
         View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_title, null);
 
         final AlertDialog diag = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme)
                 .setCustomTitle(titleView)
-                .setPositiveButton("Close & Set", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        ItemDespensa editedItem = item;
+                        editedItem.setNome(txtNameEdit.getText().toString());
+                        editedItem.setQuantidade(Float.parseFloat(txtQuantidadeEdit.getText().toString()));
+                        editedItem.setValidade(validade.getYear() + "-" + validade.getMonth() + "-" + validade.getDayOfMonth());
+                        SingletonDatabaseManager.getInstance(getContext()).editarItem(editedItem, getContext());
                     }
                 })
                 .setView(R.layout.alert_dialog_edit_inventory_body)
@@ -280,6 +276,17 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         lp.gravity = Gravity.CENTER;
         diag.getWindow().setAttributes(lp);
 
+        txtNameEdit = diag.findViewById(R.id.etProductName);
+        txtQuantidadeEdit = diag.findViewById(R.id.etQuant);
+        ImageView imagem = diag.findViewById(R.id.imageView);
+        validade = diag.findViewById(R.id.datePicker1);
+        String[] dataValidade = item.getValidade().split("-");
+
+        txtNameEdit.setText(item.getNome());
+        txtQuantidadeEdit.setText(item.getQuantidade() + "");
+        Glide.with(getContext()).load(item.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(imagem);
+        validade.updateDate(Integer.parseInt(dataValidade[0]), Integer.parseInt(dataValidade[1]), Integer.parseInt(dataValidade[2]));
+
         /*Find views By Id / Set Text*/
         // etUpPressed = diag.findViewById(R.id.dual_chanel_ediText_up_pressed);
 
@@ -290,5 +297,28 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         Log.d("InventoryFragment", "onUpdateDespensa called");
         inventoryAdapter = new InventoryAdapter(despensa);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
+
+        inventoryAdapter.setOnItemClickListener(new InventoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemCLick(int position) {
+                //todo: pensar em alguma coisa mais util para a funcao de item click
+            }
+
+            @Override
+            public void onEditClick(int position) {
+                editItem(position);
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                removeItem(position);
+            }
+        });
+    }
+
+    @Override
+    public void onDelete(int position) {
+        inventoryAdapter.notifyItemRemoved(position);
+        inventoryAdapter.InventoryList.remove(position);
     }
 }
