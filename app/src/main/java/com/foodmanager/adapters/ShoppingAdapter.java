@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
 import com.foodmanager.models.ShoppingItem;
 
@@ -72,7 +74,8 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShoppingItem currentItem = InventoryList.get(position);
 
-        holder.productImage.setImageResource(currentItem.getProductImage());
+
+        Glide.with(holder.productImage.getContext()).load(currentItem.getProductImage()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
         holder.productName.setText(currentItem.getProductName());
     }
 

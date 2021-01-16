@@ -24,10 +24,12 @@ import com.foodmanager.adapters.RecipeAdapter;
 import com.foodmanager.adapters.ShoppingAdapter;
 import com.foodmanager.models.RecipeItem;
 import com.foodmanager.models.ShoppingItem;
+import com.foodmanager.models.SingletonDatabaseManager;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.security.Signature;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -99,15 +101,9 @@ public class ShoppingListFragment extends Fragment {
 
     //Funcao para perparar o recycler view e por os itens dentro
     private void prepareRecyclerView() {
-
-        for (int i = 0; i < 10; i++) {
-            final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new ShoppingItem(R.drawable.ic_baseline_add_24, "New: " + random));
-        }
-
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(getContext());
-        inventoryAdapter = new ShoppingAdapter(inventoryItems);
+        inventoryAdapter = new ShoppingAdapter(SingletonDatabaseManager.getInstance(getContext()).getItensShopping());
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
     }

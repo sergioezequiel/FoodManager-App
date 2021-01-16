@@ -33,7 +33,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "192.168.1.74";
+    private static final String WEBSITE_IP = "192.168.1.82";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -330,6 +330,17 @@ public class SingletonDatabaseManager {
         });
 
         volleyQueue.add(request);
+    }
+
+    public void adicionarItemShopping(ShoppingItem item) {
+        helper.adicionarItemShopping(item);
+    }
+    public ArrayList<ShoppingItem> getItensShopping() {
+        return helper.getItensShopping();
+    }
+
+    public void deleteItemShopping(int item) {
+        helper.removerItemDespensa(item);
     }
 
     public void setApikey(String apikey) {
