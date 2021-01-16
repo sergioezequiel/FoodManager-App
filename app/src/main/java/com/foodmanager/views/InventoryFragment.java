@@ -102,11 +102,11 @@ public class InventoryFragment extends Fragment {
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
-        inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-        inventoryAdapter = new InventoryAdapter(inventoryItems);
+    inventoryLayoutManager = new LinearLayoutManager(view.getContext());
+    inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
-    }
+}
 
     //Funcao para remover os itens do recycler view
     public void removeItem(final int position) {
@@ -249,7 +249,7 @@ public class InventoryFragment extends Fragment {
     /*Edit Values Dialog*/
     public void editInventoryDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
-        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_body, null);
+        View titleView = inflater.inflate(R.layout.alert_dialog_edit_inventory_title, null);
 
         final AlertDialog diag = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme)
                 .setCustomTitle(titleView)
@@ -258,7 +258,7 @@ public class InventoryFragment extends Fragment {
 
                     }
                 })
-                .setView(R.layout.alert_dialog_edit_inventory_title)
+                .setView(R.layout.alert_dialog_edit_inventory_body)
                 .create();
         diag.show();
 

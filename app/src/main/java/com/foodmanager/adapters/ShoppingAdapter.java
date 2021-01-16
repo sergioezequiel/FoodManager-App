@@ -12,17 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodmanager.R;
-import com.foodmanager.models.RecipeItem;
+import com.foodmanager.models.InventoryItem;
+import com.foodmanager.models.ShoppingItem;
 
 import java.util.ArrayList;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
-    private final ArrayList<RecipeItem> InventoryList;
-    private final ArrayList<RecipeItem> InventoryListFull;
+public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHolder> {
+    private final ArrayList<ShoppingItem> InventoryList;
+    private final ArrayList<ShoppingItem> InventoryListFull;
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener{
-        void onItemCLick(int position);
+        void onDeleteClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -30,48 +31,50 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView recipeImage;
-        public TextView recipeName;
+        public ImageView productImage;
+        public TextView productName;
+        public Button productDeleteButton;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            recipeImage = itemView.findViewById(R.id.recipe_image);
-            recipeName = itemView.findViewById(R.id.recipe_name);
+            productImage = itemView.findViewById(R.id.shopping_image);
+            productName = itemView.findViewById(R.id.shopping_name);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            productDeleteButton = itemView.findViewById(R.id.shoppingRemove);
+
+            productDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null){
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
-                            listener.onItemCLick(position);
+                            listener.onDeleteClick(position);
                         }
                     }
                 }
             });
-
         }
     }
 
-    public RecipeAdapter(ArrayList<RecipeItem> inventoryList) {
+    public ShoppingAdapter(ArrayList<ShoppingItem> inventoryList) {
         InventoryList = inventoryList;
         InventoryListFull = new ArrayList<>(InventoryList);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopping_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(v, clickListener);
         return  viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecipeItem currentItem = InventoryList.get(position);
+        ShoppingItem currentItem = InventoryList.get(position);
 
-        holder.recipeImage.setImageResource(currentItem.getRecipeImage());
-        holder.recipeName.setText(currentItem.getRecipeName());
+        holder.productImage.setImageResource(currentItem.getProductImage());
+        holder.productName.setText(currentItem.getProductName());
     }
 
     @Override
@@ -86,13 +89,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     private final Filter nameFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<RecipeItem> inventoryListFiltered = new ArrayList<>();
+            ArrayList<ShoppingItem> inventoryListFiltered = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 inventoryListFiltered.addAll(InventoryListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (RecipeItem item : InventoryListFull) {
-                    if (item.getRecipeName().toLowerCase().contains(filterPattern)) {
+                for (ShoppingItem item : InventoryListFull) {
+                    if (item.getProductName().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
                     }
                 }
