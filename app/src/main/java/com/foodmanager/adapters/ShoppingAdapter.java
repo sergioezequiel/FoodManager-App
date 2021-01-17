@@ -19,7 +19,7 @@ import com.foodmanager.models.ShoppingItem;
 import java.util.ArrayList;
 
 public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHolder> {
-    private final ArrayList<ShoppingItem> InventoryList;
+    public final ArrayList<ShoppingItem> InventoryList;
     private final ArrayList<ShoppingItem> InventoryListFull;
     private OnItemClickListener clickListener;
 

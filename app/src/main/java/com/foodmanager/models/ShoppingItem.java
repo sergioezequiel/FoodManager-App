@@ -13,6 +13,8 @@ public class ShoppingItem {
         this.productName = productName;
     }
 
+    public ShoppingItem() {}
+
     public String getProductImage() {
         return productImage;
     }

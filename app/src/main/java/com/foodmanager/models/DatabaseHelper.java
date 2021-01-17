@@ -120,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SHOPPING_NOME, item.getProductName());
         values.put(SHOPPING_IMAGEM, item.getProductImage());
 
-        db.insert(TABLE_ITENS_DESPENSA, null, values);
+        db.insert(TABLE_ITENS_SHOPPING, null, values);
     }
 
 
