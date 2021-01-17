@@ -50,6 +50,7 @@ public class ScanItemActivity extends AppCompatActivity {
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         barcodeText = findViewById(R.id.barcode_text);
 
+        /*
         FloatingActionButton fab = findViewById(R.id.fabScanItem);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +59,7 @@ public class ScanItemActivity extends AppCompatActivity {
                 addItemDialog(barcodeText.getText());
 
             }
-        });
+        });*/
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 123);
