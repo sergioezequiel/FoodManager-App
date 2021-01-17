@@ -157,4 +157,5 @@ public class ManualItemActivity extends AppCompatActivity {
         });
 
     }
+
 }

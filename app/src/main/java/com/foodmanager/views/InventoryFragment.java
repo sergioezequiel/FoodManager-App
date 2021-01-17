@@ -75,7 +75,7 @@ public class InventoryFragment extends Fragment {
         prepareRecyclerView(view);
         //Funcao para ir buscar as funcoes de click
         clickFunctions(view);
-        
+
         //Adicionar o touch helper ao recycler view
         new ItemTouchHelper(inventoryCallBack).attachToRecyclerView(inventoryRecyclerView);
     }
@@ -90,7 +90,7 @@ public class InventoryFragment extends Fragment {
         fabClock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
         fabAnticlock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_anticlock);
         inventoryRecyclerView = view.findViewById(R.id.inventoryRecyclerView);
-        
+
     }
 
     //Funcao para perparar o recycler view e por os itens dentro
@@ -102,11 +102,11 @@ public class InventoryFragment extends Fragment {
         }
 
         inventoryRecyclerView.setHasFixedSize(true);
-    inventoryLayoutManager = new LinearLayoutManager(view.getContext());
-    inventoryAdapter = new InventoryAdapter(inventoryItems);
+        inventoryLayoutManager = new LinearLayoutManager(view.getContext());
+        inventoryAdapter = new InventoryAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
-}
+    }
 
     //Funcao para remover os itens do recycler view
     public void removeItem(final int position) {
@@ -159,7 +159,7 @@ public class InventoryFragment extends Fragment {
         fabManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent  intent = new Intent(getContext(), ManualItemActivity.class);
+                Intent intent = new Intent(getContext(), ManualItemActivity.class);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
             }
@@ -181,7 +181,7 @@ public class InventoryFragment extends Fragment {
             }
 
             @Override
-            public void onEditClick(int position) { 
+            public void onEditClick(int position) {
                 editItem(position);
             }
 
@@ -213,7 +213,7 @@ public class InventoryFragment extends Fragment {
 
     private void editItem(int position) {
         inventoryAdapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Item: "+ inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Item: " + inventoryItems.get(position).getProductName(), Toast.LENGTH_SHORT).show();
         editInventoryDialog();
     }
 
@@ -243,7 +243,6 @@ public class InventoryFragment extends Fragment {
             }
         });
     }
-
 
 
     /*Edit Values Dialog*/

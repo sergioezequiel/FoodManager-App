@@ -9,4 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="ingredientes">• Ingredientes:</string>
     <string name="receita">• Receita</string>
+    <string name="dura_o_40_min">Duração: 40 min</string>
+    <string name="prepara_o_60_min">Preparação: 60 min</string>
+    <string name="uma_receita">Uma receita</string>
 </resources>
