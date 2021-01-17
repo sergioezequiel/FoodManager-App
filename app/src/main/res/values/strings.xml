@@ -17,4 +17,6 @@
     <string name="password">Password</string>
     <string name="ingredientes">• Ingredientes:</string>
     <string name="receita">• Receita</string>
+    <string name="sbIngredientsMissing">Não tem ingredientes na sua despensa para fazer a receita.</string>
+    <string name="sbAllIngredientsPresent">Tem ingredientes para fazer esta receita! Toca a cozinhar!</string>
 </resources>

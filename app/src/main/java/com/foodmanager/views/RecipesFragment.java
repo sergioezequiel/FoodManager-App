@@ -25,8 +25,11 @@ import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.adapters.ProductAdapter;
 import com.foodmanager.adapters.RecipeAdapter;
+import com.foodmanager.listeners.ReceitaListener;
 import com.foodmanager.models.ProductItem;
+import com.foodmanager.models.Receita;
 import com.foodmanager.models.RecipeItem;
+import com.foodmanager.models.SingletonDatabaseManager;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,12 +37,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment implements ReceitaListener {
 
     private RecyclerView inventoryRecyclerView;
     private RecipeAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<RecipeItem> inventoryItems = new ArrayList<>();
+    public static ArrayList<Receita> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
 
@@ -56,17 +59,9 @@ public class RecipesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         inventoryRecyclerView = view.findViewById(R.id.recipeRecyclerView);
         prepareRecyclerView();
-        inventoryAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
 
-            @Override
-            public void onItemCLick(int position) {
-                Intent intent = new Intent(getContext(), RecipesDetailsActivity.class);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                intent.putExtra("POS", position);
-                startActivity(intent);
-            }
-        });
-
+        SingletonDatabaseManager.getInstance(getContext()).setReceitaListener(this);
+        SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
     }
 
     //Funcao para criar um menu de search
@@ -98,16 +93,29 @@ public class RecipesFragment extends Fragment {
 
     //Funcao para perparar o recycler view e por os itens dentro
     private void prepareRecyclerView() {
-
-        for (int i = 0; i < 10; i++) {
-            final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new RecipeItem(R.drawable.tumb, "New: " + random));
-        }
-
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(getContext());
         inventoryAdapter = new RecipeAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
+    }
+
+    @Override
+    public void onReceitasDisponiveis(ArrayList<Receita> receitas) {
+        inventoryAdapter = new RecipeAdapter(receitas);
+        inventoryRecyclerView.setAdapter(inventoryAdapter);
+
+        inventoryItems = receitas;
+
+        inventoryAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemCLick(int position) {
+                Intent intent = new Intent(getContext(), RecipesDetailsActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                intent.putExtra("POS", position);
+                startActivity(intent);
+            }
+        });
     }
 }
