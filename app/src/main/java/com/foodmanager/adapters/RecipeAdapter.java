@@ -34,13 +34,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView recipeImage;
-        public TextView recipeName;
+        public TextView recipeName, tempoDuracao, tempoPreparacao;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
+            tempoDuracao = itemView.findViewById(R.id.txt_tempoDuracao);
+            tempoPreparacao = itemView.findViewById(R.id.txt_tempoPreparacao);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,6 +77,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         Glide.with(holder.recipeImage.getContext()).load(currentItem.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.recipeImage);
         holder.recipeName.setText(currentItem.getTitulo());
+        holder.tempoDuracao.setText(" Duração: " + currentItem.getDuracaoReceita() + " min.");
+        holder.tempoPreparacao.setText(" Preparação: " + currentItem.getDuracaoPreparacao() + " min.");
     }
 
     @Override

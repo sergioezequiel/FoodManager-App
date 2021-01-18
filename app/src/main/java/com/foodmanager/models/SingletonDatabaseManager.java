@@ -38,7 +38,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "192.168.1.74";
+    public static final String WEBSITE_IP = "192.168.1.82";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -67,7 +67,7 @@ public class SingletonDatabaseManager {
     private DetalhesReceitaListener detalhesReceitaListener;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SingletonDatabaseManager(context);
             volleyQueue = Volley.newRequestQueue(context);
         }
@@ -91,7 +91,7 @@ public class SingletonDatabaseManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.noBarcodeToast, Toast.LENGTH_LONG).show();
                 }
             }
@@ -103,7 +103,7 @@ public class SingletonDatabaseManager {
     }
 
     public void login(final String email, final String password, final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -113,7 +113,7 @@ public class SingletonDatabaseManager {
             public void onResponse(String response) {
                 Utilizador utilizador = UserParser.jsonToApiKey(response);
 
-                if(utilizador == null) {
+                if (utilizador == null) {
                     Toast.makeText(context, R.string.errorLogin, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -125,11 +125,11 @@ public class SingletonDatabaseManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.errorLogin, Toast.LENGTH_LONG).show();
                 }
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -145,10 +145,10 @@ public class SingletonDatabaseManager {
     }
 
     public void getDespensa(final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
 
-            if(despensaListener != null) {
+            if (despensaListener != null) {
                 despensaListener.onUpdateDespensa(helper.getItensDespensa());
             }
             return;
@@ -168,7 +168,7 @@ public class SingletonDatabaseManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.errorLogin, Toast.LENGTH_LONG).show();
                 }
             }
@@ -180,10 +180,10 @@ public class SingletonDatabaseManager {
     }
 
     public void adicionarItem(final ItemDespensa item, final int idproduto, Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
 
-            if(despensaListener != null) {
+            if (despensaListener != null) {
                 despensaListener.onUpdateDespensa(helper.getItensDespensa());
             }
             return;
@@ -196,7 +196,7 @@ public class SingletonDatabaseManager {
                 ItemDespensa temp = ItensDespensaParser.jsonToItemDespensa(response);
                 helper.adicionarItemDespensa(temp);
 
-                if(despensaListener != null) {
+                if (despensaListener != null) {
                     despensaListener.onUpdateDespensa(helper.getItensDespensa());
                 }
             }
@@ -224,10 +224,10 @@ public class SingletonDatabaseManager {
     }
 
     public void eliminarItem(final int iditem, final int position, Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
 
-            if(despensaListener != null) {
+            if (despensaListener != null) {
                 despensaListener.onUpdateDespensa(helper.getItensDespensa());
             }
             return;
@@ -237,7 +237,7 @@ public class SingletonDatabaseManager {
             public void onResponse(String response) {
                 helper.removerItemDespensa(iditem);
 
-                if(despensaListener != null) {
+                if (despensaListener != null) {
                     despensaListener.onDelete(position);
                 }
             }
@@ -252,10 +252,10 @@ public class SingletonDatabaseManager {
     }
 
     public void editarItem(ItemDespensa item, Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
 
-            if(despensaListener != null) {
+            if (despensaListener != null) {
                 despensaListener.onUpdateDespensa(helper.getItensDespensa());
             }
             return;
@@ -265,7 +265,7 @@ public class SingletonDatabaseManager {
             public void onResponse(String response) {
                 helper.editarItemDespensa(item);
 
-                if(despensaListener != null) {
+                if (despensaListener != null) {
                     despensaListener.onUpdateDespensa(helper.getItensDespensa());
                 }
             }
@@ -274,7 +274,7 @@ public class SingletonDatabaseManager {
             public void onErrorResponse(VolleyError error) {
                 Log.d("Erro Volley", " " + error.getMessage());
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -291,7 +291,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getCategoriasString(final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -301,14 +301,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<String> categorias = CategoriasParser.jsonToStringArray(response);
 
-                if(manualItemListener != null) {
+                if (manualItemListener != null) {
                     manualItemListener.onGetCategorias(categorias);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -318,7 +318,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getProdutosPelaCategoria(String categoria, final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -328,14 +328,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<Produto> produtos = ProdutosParser.jsonToProdutos(response);
 
-                if(manualItemListener != null) {
+                if (manualItemListener != null) {
                     manualItemListener.onChangeCategory(produtos);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -345,7 +345,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getReceitasDisponiveis(final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -355,14 +355,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);
 
-                if(receitaListener != null) {
+                if (receitaListener != null) {
                     receitaListener.onReceitasDisponiveis(produtos);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -372,7 +372,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getTodasReceitas(final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -382,14 +382,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);
 
-                if(receitaListener != null) {
+                if (receitaListener != null) {
                     receitaListener.onReceitasDisponiveis(produtos);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -399,7 +399,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getIngredientesCorretos(int idReceita, final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -409,14 +409,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<Ingrediente> produtos = IngredientesParser.jsonToIngredientes(response);
 
-                if(detalhesReceitaListener != null) {
+                if (detalhesReceitaListener != null) {
                     detalhesReceitaListener.onGetIngredientesCorretos(produtos);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -426,7 +426,7 @@ public class SingletonDatabaseManager {
     }
 
     public void getIngredientesEmFalta(int idReceita, final Context context) {
-        if(!Utils.isConnected(context)) {
+        if (!Utils.isConnected(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -436,14 +436,14 @@ public class SingletonDatabaseManager {
             public void onResponse(JSONArray response) {
                 ArrayList<Ingrediente> produtos = IngredientesParser.jsonToIngredientes(response);
 
-                if(detalhesReceitaListener != null) {
+                if (detalhesReceitaListener != null) {
                     detalhesReceitaListener.onGetIngredientesEmFalta(produtos);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 404) {
+                if (error.networkResponse.statusCode == 404) {
                     Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
                 }
             }
@@ -454,7 +454,7 @@ public class SingletonDatabaseManager {
 
     public void adicionarItemShopping(ShoppingItem item) {
         helper.adicionarItemShopping(item);
-        if(shoppingListListener != null) {
+        if (shoppingListListener != null) {
             shoppingListListener.onChangeList(helper.getItensShopping());
         }
     }
@@ -465,8 +465,18 @@ public class SingletonDatabaseManager {
 
     public void deleteItemShopping(int item) {
         helper.removerItemShopping(item);
-        if(shoppingListListener != null) {
+        if (shoppingListListener != null) {
             shoppingListListener.onChangeList(helper.getItensShopping());
+        }
+    }
+
+    public void adicionarIngredientesListaCompras(ArrayList<Ingrediente> ingredientes) {
+        for (Ingrediente ingrediente : ingredientes) {
+            ShoppingItem temp = new ShoppingItem();
+            // temp.setProductName(ingrediente.getNome() + " " + ingrediente.getQuantString());
+            temp.setProductName(ingrediente.getNome());
+            temp.setProductImage("");
+            helper.adicionarItemShopping(temp);
         }
     }
 

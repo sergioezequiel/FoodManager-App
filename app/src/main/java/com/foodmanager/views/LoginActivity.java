@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         fabResgister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openChromeCustomTabs("http://192.168.1.74/foodman/frontend/web/site/signup");
+                openChromeCustomTabs("http://" + SingletonDatabaseManager.WEBSITE_IP + "/foodman/frontend/web/site/signup");
             }
         });
 

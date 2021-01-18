@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_light"
                     android:lineSpacingExtra="8sp"
-                    android:text="Add Product"
+                    android:text="@string/add_product"
                     android:textAlignment="center"
                     android:textColor="@color/nivel6"
                     android:textSize="36sp"
@@ -47,11 +47,12 @@
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name:"
+                    android:hint="@string/name"
                     android:textColorHint="@color/white"
                     app:layout_constraintTop_toBottomOf="@id/editTextNickname">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/productName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -65,7 +66,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Your Name"
+                    android:hint="@string/category"
                     android:textColorHint="@color/white"
                     app:endIconMode="dropdown_menu"
                     app:endIconTint="@color/white"

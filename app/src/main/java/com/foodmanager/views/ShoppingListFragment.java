@@ -78,6 +78,7 @@ public class ShoppingListFragment extends Fragment implements ShoppingListListen
         prepareRecyclerView();
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.nivel6));
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override

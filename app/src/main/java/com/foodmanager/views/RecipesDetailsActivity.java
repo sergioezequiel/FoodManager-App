@@ -1,5 +1,7 @@
 package com.foodmanager.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -44,6 +46,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
     private AppBarLayout appBarLayout;
     private TextView receitaText;
     private Receita receita;
+    private ArrayList<Ingrediente> ingredientesEmFaltaArray;
     private boolean ingredientesEmFalta = false;
     private int pos;
 
@@ -85,7 +88,23 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
             @Override
             public void onClick(View view) {
                 if(ingredientesEmFalta) {
-                    Snackbar.make(view, R.string.sbIngredientsMissing, Snackbar.LENGTH_LONG).show();
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    SingletonDatabaseManager.getInstance(getApplicationContext()).adicionarIngredientesListaCompras(ingredientesEmFaltaArray);
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecipesDetailsActivity.this);
+                    builder.setIcon(R.drawable.ic_baseline_add_shopping_cart_24).setTitle("Ingredientes Em Falta").setMessage("Faltam ingredientes para a receita. Pretende adicioná-los ao carrinho de compras?").setPositiveButton("Sim", dialogClickListener)
+                            .setNegativeButton("Não", dialogClickListener).show();
                 }
                 else {
                     Snackbar.make(view, R.string.sbAllIngredientsPresent, Snackbar.LENGTH_LONG).show();
@@ -108,11 +127,13 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
             TextView temp = new TextView(this);
             temp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ingrediente_em_falta, 0, 0, 0);
             temp.setText(quantidades(ingrediente));
+            temp.setTextColor(getResources().getColor(R.color.white));
             layoutIngredientes.addView(temp);
         }
         ViewCompat.setBackgroundTintList(fab, ColorStateList.valueOf(Color.RED));
-        fab.setImageResource(R.drawable.ic_ingrediente_em_falta);
+        fab.setImageResource(R.drawable.ic_baseline_add_shopping_cart_24);
         ingredientesEmFalta = true;
+        ingredientesEmFaltaArray = ingredientes;
     }
 
     @Override
@@ -121,6 +142,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
             TextView temp = new TextView(this);
             temp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ingrediente_correto, 0, 0, 0);
             temp.setText(quantidades(ingrediente));
+            temp.setTextColor(getResources().getColor(R.color.white));
             layoutIngredientes.addView(temp);
         }
     }

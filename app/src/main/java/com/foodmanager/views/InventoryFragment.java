@@ -32,6 +32,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -60,6 +61,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
     private InventoryAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     // Dialog Edit
     private EditText txtNameEdit, txtQuantidadeEdit;
@@ -100,6 +102,21 @@ public class InventoryFragment extends Fragment implements DespensaListener {
 
         SingletonDatabaseManager.getInstance(getContext()).setDespensaListener(this);
         SingletonDatabaseManager.getInstance(getContext()).getDespensa(getContext());
+
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.nivel6));
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d("gosto de pipi",  "Inventory Lista Update");
+                        SingletonDatabaseManager.getInstance(getContext()).getDespensa(getContext());
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
     }
 
     //Funcao para ir buscar todas as views pelo id

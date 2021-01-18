@@ -83,7 +83,7 @@ public class ManualItemActivity extends AppCompatActivity implements ManualItemL
             }
         });
 
-        EditText etTest = findViewById(R.id.nomeProduct);
+        EditText etTest = findViewById(R.id.productName);
         etTest.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

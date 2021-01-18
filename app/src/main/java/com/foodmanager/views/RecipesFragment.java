@@ -52,6 +52,7 @@ public class RecipesFragment extends Fragment implements ReceitaListener {
     private TextInputLayout textInputLayout;
     private FloatingActionButton allReceitas;
     private Boolean isOpen = false;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +93,26 @@ public class RecipesFragment extends Fragment implements ReceitaListener {
                 }
             }
         });
+
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.nivel6));
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d("gosto de cona",  "Receitas Lista Update");
+                        if(!isOpen) {
+                            SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
+                        }
+                        else {
+                            SingletonDatabaseManager.getInstance(getContext()).getTodasReceitas(getContext());
+                        }
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
 
     }
 
