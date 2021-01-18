@@ -111,7 +111,6 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.d("gosto de pipi",  "Inventory Lista Update");
                         SingletonDatabaseManager.getInstance(getContext()).getDespensa(getContext());
                         swipeRefreshLayout.setRefreshing(false);
                     }

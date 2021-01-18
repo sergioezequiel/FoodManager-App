@@ -83,7 +83,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListListen
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.d("gosto de pila",  "onRefresh called from SwipeRefreshLayout");
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }

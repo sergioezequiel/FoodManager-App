@@ -102,7 +102,6 @@ public class RecipesFragment extends Fragment implements ReceitaListener {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.d("gosto de cona",  "Receitas Lista Update");
                         if(!isOpen) {
                             SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
                         }
