@@ -21,6 +21,7 @@
         tools:targetApi="m">
         <activity
             android:name=".views.RecipesDetailsActivity"
+            android:parentActivityName=".views.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".views.ManualItemActivity"

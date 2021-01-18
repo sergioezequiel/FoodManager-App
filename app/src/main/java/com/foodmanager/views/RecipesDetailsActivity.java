@@ -63,7 +63,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         receita = RecipesFragment.inventoryItems.get(pos);
 
         layoutIngredientes = findViewById(R.id.ingredientes);
