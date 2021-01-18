@@ -2,6 +2,7 @@ package com.foodmanager.models;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,8 +29,11 @@ import com.foodmanager.listeners.ManualItemListener;
 import com.foodmanager.listeners.ReceitaListener;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 import com.foodmanager.listeners.ShoppingListListener;
+import com.foodmanager.listeners.StatsListener;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +55,9 @@ public class SingletonDatabaseManager {
     private static final String receitasDisponiveisApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/receitadispo";
     private static final String ingredientesEmFaltaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/ingredientesemfalta";
     private static final String ingredientesCorretosApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/ingredientescorretos";
+    private static final String statsUserApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/stats";
+    private static final String statsDespensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/count";
+    private static final String statsReceitasApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/receitas/count";
 
     private static SingletonDatabaseManager instance = null;
     private DatabaseHelper helper;
@@ -65,6 +72,7 @@ public class SingletonDatabaseManager {
     private ShoppingListListener shoppingListListener;
     private ReceitaListener receitaListener;
     private DetalhesReceitaListener detalhesReceitaListener;
+    private StatsListener statsListener;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
         if (instance == null) {
@@ -452,6 +460,90 @@ public class SingletonDatabaseManager {
         volleyQueue.add(request);
     }
 
+    public void getStatsUtilizador(Context context) {
+        if (!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, statsUserApi + "/" + apikey, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject stats = new JSONObject(response);
+
+                    if (statsListener != null) {
+                        statsListener.onGetStatsUser(stats.getInt("created_at"), stats.getInt("status"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getStatsDespensa(Context context) {
+        if (!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, statsDespensaApi + "/" + apikey, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject stats = new JSONObject(response);
+
+                    if (statsListener != null) {
+                        statsListener.onGetStatsDespensa(stats.getInt("contagem"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getStatsReceitas(Context context) {
+        if (!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, statsReceitasApi + "/" + apikey, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject stats = new JSONObject(response);
+
+                    if (statsListener != null) {
+                        statsListener.onGetStatsReceitas(stats.getInt("contagem"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
     public void adicionarItemShopping(ShoppingItem item) {
         helper.adicionarItemShopping(item);
         if (shoppingListListener != null) {
@@ -512,5 +604,9 @@ public class SingletonDatabaseManager {
 
     public void setShoppingListListener(ShoppingListListener shoppingListListener) {
         this.shoppingListListener = shoppingListListener;
+    }
+
+    public void setStatsListener(StatsListener statsListener) {
+        this.statsListener = statsListener;
     }
 }
