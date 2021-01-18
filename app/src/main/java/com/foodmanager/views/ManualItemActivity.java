@@ -122,7 +122,12 @@ public class ManualItemActivity extends AppCompatActivity implements ManualItemL
                     public void onClick(DialogInterface dialog, int id) {
                         ItemDespensa newItem = new ItemDespensa();
                         newItem.setNome(productName.getText().toString());
-                        newItem.setQuantidade(Float.parseFloat(productQty.getText().toString()));
+                        if(!productQty.getText().toString().trim().equals("")) {
+                            newItem.setQuantidade(Float.parseFloat(productQty.getText().toString()));
+                        }
+                        else {
+                            newItem.setQuantidade(0.0f);
+                        }
                         newItem.setValidade(validade.getYear() + "-" + (validade.getMonth() + 1) + "-" + validade.getDayOfMonth());
                         Log.d("nome", newItem.getNome());
                         Log.d("quant", newItem.getQuantidade() + "");

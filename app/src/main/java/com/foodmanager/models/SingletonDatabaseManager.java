@@ -27,6 +27,7 @@ import com.foodmanager.listeners.LoginListener;
 import com.foodmanager.listeners.ManualItemListener;
 import com.foodmanager.listeners.ReceitaListener;
 import com.foodmanager.listeners.ScannedBarcodeListener;
+import com.foodmanager.listeners.ShoppingListListener;
 
 import org.json.JSONArray;
 
@@ -37,7 +38,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "192.168.1.82";
+    private static final String WEBSITE_IP = "192.168.1.74";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -61,6 +62,7 @@ public class SingletonDatabaseManager {
     private LoginListener loginListener;
     private DespensaListener despensaListener;
     private ManualItemListener manualItemListener;
+    private ShoppingListListener shoppingListListener;
     private ReceitaListener receitaListener;
     private DetalhesReceitaListener detalhesReceitaListener;
 
@@ -324,7 +326,6 @@ public class SingletonDatabaseManager {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, produtosCategoriaApi + "/" + categoria, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("Query", response.toString());
                 ArrayList<Produto> produtos = ProdutosParser.jsonToProdutos(response);
 
                 if(manualItemListener != null) {
@@ -451,6 +452,24 @@ public class SingletonDatabaseManager {
         volleyQueue.add(request);
     }
 
+    public void adicionarItemShopping(ShoppingItem item) {
+        helper.adicionarItemShopping(item);
+        if(shoppingListListener != null) {
+            shoppingListListener.onChangeList(helper.getItensShopping());
+        }
+    }
+
+    public ArrayList<ShoppingItem> getItensShopping() {
+        return helper.getItensShopping();
+    }
+
+    public void deleteItemShopping(int item) {
+        helper.removerItemShopping(item);
+        if(shoppingListListener != null) {
+            shoppingListListener.onChangeList(helper.getItensShopping());
+        }
+    }
+
     public void setApikey(String apikey) {
         this.apikey = apikey;
     }
@@ -479,5 +498,9 @@ public class SingletonDatabaseManager {
 
     public void setDetalhesReceitaListener(DetalhesReceitaListener detalhesReceitaListener) {
         this.detalhesReceitaListener = detalhesReceitaListener;
+    }
+
+    public void setShoppingListListener(ShoppingListListener shoppingListListener) {
+        this.shoppingListListener = shoppingListListener;
     }
 }
