@@ -6,14 +6,16 @@ public class Receita {
     private int duracaoReceita;
     private int duracaoPreparacao;
     private String passos;
+    private String imagem;
     private int idUtilizador;
 
-    public Receita(int idReceita, String titulo, int duracaoReceita, int duracaoPreparacao, String passos, int idUtilizador) {
+    public Receita(int idReceita, String titulo, int duracaoReceita, int duracaoPreparacao, String passos, String imagem, int idUtilizador) {
         this.idReceita = idReceita;
         this.titulo = titulo;
         this.duracaoReceita = duracaoReceita;
         this.duracaoPreparacao = duracaoPreparacao;
         this.passos = passos;
+        this.imagem = imagem;
         this.idUtilizador = idUtilizador;
     }
 
@@ -55,6 +57,14 @@ public class Receita {
 
     public void setPassos(String passos) {
         this.passos = passos;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public int getIdUtilizador() {

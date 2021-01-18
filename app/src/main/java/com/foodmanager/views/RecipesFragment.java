@@ -10,7 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,8 +28,12 @@ import com.foodmanager.R;
 import com.foodmanager.adapters.InventoryAdapter;
 import com.foodmanager.adapters.ProductAdapter;
 import com.foodmanager.adapters.RecipeAdapter;
+import com.foodmanager.listeners.ReceitaListener;
 import com.foodmanager.models.ProductItem;
+import com.foodmanager.models.Receita;
 import com.foodmanager.models.RecipeItem;
+import com.foodmanager.models.SingletonDatabaseManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +41,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment implements ReceitaListener {
 
+    private Animation fabClock, fabAnticlock;
     private RecyclerView inventoryRecyclerView;
     private RecipeAdapter inventoryAdapter;
     private RecyclerView.LayoutManager inventoryLayoutManager;
-    private ArrayList<RecipeItem> inventoryItems = new ArrayList<>();
+    public static ArrayList<Receita> inventoryItems = new ArrayList<>();
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private TextInputLayout textInputLayout;
+    private FloatingActionButton allReceitas;
+    private Boolean isOpen = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,14 +66,30 @@ public class RecipesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         inventoryRecyclerView = view.findViewById(R.id.recipeRecyclerView);
         prepareRecyclerView();
-        inventoryAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
 
+        SingletonDatabaseManager.getInstance(getContext()).setReceitaListener(this);
+        SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
+
+        allReceitas = view.findViewById(R.id.fabAllReceitas);
+
+        fabClock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
+        fabAnticlock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_anticlock);
+
+        titulo("Available Recipes");
+        allReceitas.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemCLick(int position) {
-                Intent intent = new Intent(getContext(), RecipesDetailsActivity.class);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                intent.putExtra("POS", position);
-                startActivity(intent);
+            public void onClick(View v) {
+                if (isOpen) {
+                    SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
+                    allReceitas.startAnimation(fabAnticlock);
+                    titulo("Available Recipes");
+                    isOpen = false;
+                } else {
+                    SingletonDatabaseManager.getInstance(getContext()).getTodasReceitas(getContext());
+                    allReceitas.startAnimation(fabClock);
+                    isOpen = true;
+                    titulo("All Recipes");
+                }
             }
         });
 
@@ -98,16 +124,33 @@ public class RecipesFragment extends Fragment {
 
     //Funcao para perparar o recycler view e por os itens dentro
     private void prepareRecyclerView() {
-
-        for (int i = 0; i < 10; i++) {
-            final int random = new Random().nextInt(26) + 75;
-            inventoryItems.add(0, new RecipeItem(R.drawable.tumb, "New: " + random));
-        }
-
         inventoryRecyclerView.setHasFixedSize(true);
         inventoryLayoutManager = new LinearLayoutManager(getContext());
         inventoryAdapter = new RecipeAdapter(inventoryItems);
         inventoryRecyclerView.setLayoutManager(inventoryLayoutManager);
         inventoryRecyclerView.setAdapter(inventoryAdapter);
+    }
+
+    @Override
+    public void onReceitasDisponiveis(ArrayList<Receita> receitas) {
+        inventoryAdapter = new RecipeAdapter(receitas);
+        inventoryRecyclerView.setAdapter(inventoryAdapter);
+
+        inventoryItems = receitas;
+
+        inventoryAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemCLick(int position) {
+                Intent intent = new Intent(getContext(), RecipesDetailsActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                intent.putExtra("POS", position);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void titulo(String titulo) {
+        ((MainActivity) getActivity()).setActionBarTitle(titulo);
     }
 }

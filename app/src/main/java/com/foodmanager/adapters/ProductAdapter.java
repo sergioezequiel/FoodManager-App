@@ -74,13 +74,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(v, clickListener);
-        return  viewHolder;
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Produto currentItem = InventoryList.get(position);
-
+        System.out.println("Position: " + position);
         Glide.with(holder.productImage.getContext()).load(currentItem.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
         Log.d("Imagem", currentItem.getImagem());
         holder.productName.setText(currentItem.getNome());
@@ -91,7 +91,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return InventoryList.size();
     }
 
-    public  Filter getFilter() {
+    public Filter getFilter() {
         return nameFilter;
     }
 

@@ -94,7 +94,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         prepareRecyclerView(view);
         //Funcao para ir buscar as funcoes de click
         clickFunctions(view);
-        
+
         //Adicionar o touch helper ao recycler view
         new ItemTouchHelper(inventoryCallBack).attachToRecyclerView(inventoryRecyclerView);
 
@@ -112,7 +112,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         fabClock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
         fabAnticlock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_anticlock);
         inventoryRecyclerView = view.findViewById(R.id.inventoryRecyclerView);
-        
+
     }
 
     //Funcao para perparar o recycler view e por os itens dentro
@@ -171,11 +171,11 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         fabManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!Utils.isConnected(getContext())) {
+                if (!Utils.isConnected(getContext())) {
                     Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent  intent = new Intent(getContext(), ManualItemActivity.class);
+                Intent intent = new Intent(getContext(), ManualItemActivity.class);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
             }
@@ -184,7 +184,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!Utils.isConnected(getContext())) {
+                if (!Utils.isConnected(getContext())) {
                     Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -193,7 +193,6 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 startActivity(intent);
             }
         });
-
 
 
         inventoryCallBack = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -242,7 +241,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(inventoryAdapter != null) {
+                if (inventoryAdapter != null) {
                     inventoryAdapter.getFilter().filter(newText);
                 }
                 return false;

@@ -11,14 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodmanager.R;
+import com.foodmanager.models.Receita;
 import com.foodmanager.models.RecipeItem;
 
 import java.util.ArrayList;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
-    private final ArrayList<RecipeItem> InventoryList;
-    private final ArrayList<RecipeItem> InventoryListFull;
+    private final ArrayList<Receita> InventoryList;
+    private final ArrayList<Receita> InventoryListFull;
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener{
@@ -54,7 +57,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
     }
 
-    public RecipeAdapter(ArrayList<RecipeItem> inventoryList) {
+    public RecipeAdapter(ArrayList<Receita> inventoryList) {
         InventoryList = inventoryList;
         InventoryListFull = new ArrayList<>(InventoryList);
     }
@@ -68,10 +71,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecipeItem currentItem = InventoryList.get(position);
+        Receita currentItem = InventoryList.get(position);
 
-        holder.recipeImage.setImageResource(currentItem.getRecipeImage());
-        holder.recipeName.setText(currentItem.getRecipeName());
+        Glide.with(holder.recipeImage.getContext()).load(currentItem.getImagem()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.recipeImage);
+        holder.recipeName.setText(currentItem.getTitulo());
     }
 
     @Override
@@ -86,13 +89,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     private final Filter nameFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<RecipeItem> inventoryListFiltered = new ArrayList<>();
+            ArrayList<Receita> inventoryListFiltered = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 inventoryListFiltered.addAll(InventoryListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (RecipeItem item : InventoryListFull) {
-                    if (item.getRecipeName().toLowerCase().contains(filterPattern)) {
+                for (Receita item : InventoryListFull) {
+                    if (item.getTitulo().toLowerCase().contains(filterPattern)) {
                         inventoryListFiltered.add(item);
                     }
                 }

@@ -16,12 +16,16 @@ import com.android.volley.toolbox.Volley;
 import com.foodmanager.R;
 import com.foodmanager.jsonparsers.CategoriasParser;
 import com.foodmanager.jsonparsers.CodigoBarrasParser;
+import com.foodmanager.jsonparsers.IngredientesParser;
 import com.foodmanager.jsonparsers.ItensDespensaParser;
 import com.foodmanager.jsonparsers.ProdutosParser;
+import com.foodmanager.jsonparsers.ReceitasParser;
 import com.foodmanager.jsonparsers.UserParser;
 import com.foodmanager.listeners.DespensaListener;
+import com.foodmanager.listeners.DetalhesReceitaListener;
 import com.foodmanager.listeners.LoginListener;
 import com.foodmanager.listeners.ManualItemListener;
+import com.foodmanager.listeners.ReceitaListener;
 import com.foodmanager.listeners.ScannedBarcodeListener;
 
 import org.json.JSONArray;
@@ -33,7 +37,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "192.168.1.74";
+    private static final String WEBSITE_IP = "192.168.1.82";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -42,6 +46,10 @@ public class SingletonDatabaseManager {
     private static final String defaultDespensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa";
     private static final String produtosCategoriaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/produtos/pelacategoria";
     private static final String categoriasApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/categorias";
+    private static final String receitasApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/receitas";
+    private static final String receitasDisponiveisApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/receitadispo";
+    private static final String ingredientesEmFaltaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/ingredientesemfalta";
+    private static final String ingredientesCorretosApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/ingredientes/ingredientescorretos";
 
     private static SingletonDatabaseManager instance = null;
     private DatabaseHelper helper;
@@ -53,6 +61,8 @@ public class SingletonDatabaseManager {
     private LoginListener loginListener;
     private DespensaListener despensaListener;
     private ManualItemListener manualItemListener;
+    private ReceitaListener receitaListener;
+    private DetalhesReceitaListener detalhesReceitaListener;
 
     public static synchronized SingletonDatabaseManager getInstance(Context context) {
         if(instance == null) {
@@ -314,10 +324,119 @@ public class SingletonDatabaseManager {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, produtosCategoriaApi + "/" + categoria, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                Log.d("Query", response.toString());
                 ArrayList<Produto> produtos = ProdutosParser.jsonToProdutos(response);
 
                 if(manualItemListener != null) {
                     manualItemListener.onChangeCategory(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getReceitasDisponiveis(final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, receitasDisponiveisApi + "/" + apikey, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);
+
+                if(receitaListener != null) {
+                    receitaListener.onReceitasDisponiveis(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getTodasReceitas(final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, receitasApi, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);
+
+                if(receitaListener != null) {
+                    receitaListener.onReceitasDisponiveis(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getIngredientesCorretos(int idReceita, final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ingredientesCorretosApi + "/" + apikey + "?receita=" + idReceita, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Ingrediente> produtos = IngredientesParser.jsonToIngredientes(response);
+
+                if(detalhesReceitaListener != null) {
+                    detalhesReceitaListener.onGetIngredientesCorretos(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getIngredientesEmFalta(int idReceita, final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ingredientesEmFaltaApi + "/" + apikey + "?receita=" + idReceita, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Ingrediente> produtos = IngredientesParser.jsonToIngredientes(response);
+
+                if(detalhesReceitaListener != null) {
+                    detalhesReceitaListener.onGetIngredientesEmFalta(produtos);
                 }
             }
         }, new Response.ErrorListener() {
@@ -352,5 +471,13 @@ public class SingletonDatabaseManager {
 
     public void setManualItemListener(ManualItemListener manualItemListener) {
         this.manualItemListener = manualItemListener;
+    }
+
+    public void setReceitaListener(ReceitaListener receitaListener) {
+        this.receitaListener = receitaListener;
+    }
+
+    public void setDetalhesReceitaListener(DetalhesReceitaListener detalhesReceitaListener) {
+        this.detalhesReceitaListener = detalhesReceitaListener;
     }
 }

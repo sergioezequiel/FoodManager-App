@@ -8,8 +8,75 @@ public class Ingrediente {
 
     private int idIngrediente;
     private String nome;
-    private float quantidadeNecessaria;
+    private int quantidadeNecessaria;
     private int tipoPreparacao;
+    private String quantString; // quantidade com unidade
     private int idProduto;
     private int idReceita;
+
+    public Ingrediente(int idIngrediente, String nome, int quantidadeNecessaria, String quantString, int tipoPreparacao, int idProduto, int idReceita) {
+        this.idIngrediente = idIngrediente;
+        this.nome = nome;
+        this.quantidadeNecessaria = quantidadeNecessaria;
+        this.tipoPreparacao = tipoPreparacao;
+        this.quantString = quantString;
+        this.idProduto = idProduto;
+        this.idReceita = idReceita;
+    }
+
+    public int getIdIngrediente() {
+        return idIngrediente;
+    }
+
+    public void setIdIngrediente(int idIngrediente) {
+        this.idIngrediente = idIngrediente;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getQuantidadeNecessaria() {
+        return quantidadeNecessaria;
+    }
+
+    public void setQuantidadeNecessaria(int quantidadeNecessaria) {
+        this.quantidadeNecessaria = quantidadeNecessaria;
+    }
+
+    public int getTipoPreparacao() {
+        return tipoPreparacao;
+    }
+
+    public void setTipoPreparacao(int tipoPreparacao) {
+        this.tipoPreparacao = tipoPreparacao;
+    }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public int getIdReceita() {
+        return idReceita;
+    }
+
+    public void setIdReceita(int idReceita) {
+        this.idReceita = idReceita;
+    }
+
+    public String getQuantString() {
+        return quantString;
+    }
+
+    public void setQuantString(String quantString) {
+        this.quantString = quantString;
+    }
 }
