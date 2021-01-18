@@ -183,4 +183,5 @@ public class ManualItemActivity extends AppCompatActivity implements ManualItemL
         this.categorias = categorias;
         dropDownText.setAdapter(adapter);
     }
+
 }

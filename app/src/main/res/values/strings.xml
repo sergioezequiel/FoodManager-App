@@ -19,4 +19,7 @@
     <string name="receita">• Receita</string>
     <string name="sbIngredientsMissing">Não tem ingredientes na sua despensa para fazer a receita.</string>
     <string name="sbAllIngredientsPresent">Tem ingredientes para fazer esta receita! Toca a cozinhar!</string>
+    <string name="dura_o_40_min">Duração: 40 min</string>
+    <string name="prepara_o_60_min">Preparação: 60 min</string>
+    <string name="uma_receita">Uma receita</string>
 </resources>
