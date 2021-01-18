@@ -37,7 +37,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    private static final String WEBSITE_IP = "192.168.1.74";
+    private static final String WEBSITE_IP = "192.168.1.82";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -350,6 +350,33 @@ public class SingletonDatabaseManager {
         }
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, receitasDisponiveisApi + "/" + apikey, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);
+
+                if(receitaListener != null) {
+                    receitaListener.onReceitasDisponiveis(produtos);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error.networkResponse.statusCode == 404) {
+                    Toast.makeText(context, R.string.internalError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        volleyQueue.add(request);
+    }
+
+    public void getTodasReceitas(final Context context) {
+        if(!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, receitasApi, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 ArrayList<Receita> produtos = ReceitasParser.jsonToReceitas(response);

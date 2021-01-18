@@ -12,6 +12,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.foodmanager.listeners.DetalhesReceitaListener;
 import com.foodmanager.models.Ingrediente;
+import com.foodmanager.models.Receita;
 import com.foodmanager.models.SingletonDatabaseManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -42,6 +43,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
     private FloatingActionButton fab;
     private AppBarLayout appBarLayout;
     private TextView receitaText;
+    private Receita receita;
     private boolean ingredientesEmFalta = false;
     private int pos;
 
@@ -58,6 +60,8 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
+
+        receita = RecipesFragment.inventoryItems.get(pos);
 
         layoutIngredientes = findViewById(R.id.ingredientes);
         fab = findViewById(R.id.fab);
@@ -103,7 +107,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
         for (Ingrediente ingrediente : ingredientes) {
             TextView temp = new TextView(this);
             temp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ingrediente_em_falta, 0, 0, 0);
-            temp.setText(ingrediente.getNome());
+            temp.setText(quantidades(ingrediente));
             layoutIngredientes.addView(temp);
         }
         ViewCompat.setBackgroundTintList(fab, ColorStateList.valueOf(Color.RED));
@@ -116,8 +120,61 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
         for (Ingrediente ingrediente : ingredientes) {
             TextView temp = new TextView(this);
             temp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ingrediente_correto, 0, 0, 0);
-            temp.setText(ingrediente.getNome());
+            temp.setText(quantidades(ingrediente));
             layoutIngredientes.addView(temp);
         }
+    }
+
+    public String quantidades(Ingrediente ingrediente) {
+        String ingredienteFinal;
+
+        if(ingrediente.getQuantidadeNecessaria() == 0) {
+            if(ingrediente.getTipoPreparacao() == 0) {
+                ingredienteFinal = ingrediente.getNome();
+            }
+            else {
+                String preparacao;
+                switch (ingrediente.getTipoPreparacao()) {
+                    case Ingrediente.PICADO:
+                        preparacao = "Picado";
+                        break;
+                    case Ingrediente.AOS_CUBOS:
+                        preparacao = "Aos Cubos";
+                        break;
+                    case Ingrediente.AS_RODELAS:
+                        preparacao = "Ás Rodelas";
+                        break;
+                    default:
+                        preparacao = "Desconhecido";
+                        break;
+                }
+                ingredienteFinal = ingrediente.getNome() + " " + preparacao;
+            }
+        }
+        else {
+            if(ingrediente.getTipoPreparacao() == 0) {
+                ingredienteFinal = ingrediente.getNome() + " (" + ingrediente.getQuantString() + ")";
+            }
+            else {
+                String preparacao;
+                switch (ingrediente.getTipoPreparacao()) {
+                    case Ingrediente.PICADO:
+                        preparacao = "Picado";
+                        break;
+                    case Ingrediente.AOS_CUBOS:
+                        preparacao = "Aos Cubos";
+                        break;
+                    case Ingrediente.AS_RODELAS:
+                        preparacao = "Ás Rodelas";
+                        break;
+                    default:
+                        preparacao = "Desconhecido";
+                        break;
+                }
+                ingredienteFinal = ingrediente.getNome() + " " + preparacao + " (" + ingrediente.getQuantString() + ")";
+            }
+        }
+
+        return ingredienteFinal;
     }
 }

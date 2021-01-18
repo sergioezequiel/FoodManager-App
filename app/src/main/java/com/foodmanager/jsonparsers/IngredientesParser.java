@@ -16,7 +16,7 @@ public class IngredientesParser {
         try {
             for(int i = 0; i < response.length(); i++) {
                 JSONObject item = (JSONObject) response.get(i);
-                itens.add(new Ingrediente(item.getInt("idingrediente"), item.getString("nome"), item.getInt("quantnecessaria"), item.getInt("tipopreparacao"), item.getInt("idproduto"), item.getInt("idreceita")));
+                itens.add(new Ingrediente(item.getInt("idingrediente"), item.getString("nome"), item.getInt("quantnecessaria"), item.getString("quantstring"), item.getInt("tipopreparacao"), item.getInt("idproduto"), item.getInt("idreceita")));
             }
         }
         catch (JSONException e) {

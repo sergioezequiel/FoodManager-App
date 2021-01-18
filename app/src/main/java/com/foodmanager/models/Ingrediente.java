@@ -10,14 +10,16 @@ public class Ingrediente {
     private String nome;
     private int quantidadeNecessaria;
     private int tipoPreparacao;
+    private String quantString; // quantidade com unidade
     private int idProduto;
     private int idReceita;
 
-    public Ingrediente(int idIngrediente, String nome, int quantidadeNecessaria, int tipoPreparacao, int idProduto, int idReceita) {
+    public Ingrediente(int idIngrediente, String nome, int quantidadeNecessaria, String quantString, int tipoPreparacao, int idProduto, int idReceita) {
         this.idIngrediente = idIngrediente;
         this.nome = nome;
         this.quantidadeNecessaria = quantidadeNecessaria;
         this.tipoPreparacao = tipoPreparacao;
+        this.quantString = quantString;
         this.idProduto = idProduto;
         this.idReceita = idReceita;
     }
@@ -68,5 +70,13 @@ public class Ingrediente {
 
     public void setIdReceita(int idReceita) {
         this.idReceita = idReceita;
+    }
+
+    public String getQuantString() {
+        return quantString;
+    }
+
+    public void setQuantString(String quantString) {
+        this.quantString = quantString;
     }
 }

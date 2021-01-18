@@ -48,4 +48,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return 0;
     }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
 }
