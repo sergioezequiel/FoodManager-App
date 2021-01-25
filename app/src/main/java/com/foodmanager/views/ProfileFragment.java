@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ public class ProfileFragment extends Fragment implements StatsListener {
 
     private FloatingActionButton fabLogout;
     private TextView textViewProfileName, txtProfileEmail, txtProfileCreated, txtState, textViewTotalRecipes, textViewTotalInventory;
+    private Button feedback;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +50,19 @@ public class ProfileFragment extends Fragment implements StatsListener {
                 editor.apply();
 
                 Intent intent = new Intent(ProfileFragment.this.getActivity(), LoginActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
                 ProfileFragment.this.getActivity().finish();
+            }
+        });
+
+        feedback = root.findViewById(R.id.profileFeedback);
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileFragment.this.getActivity(), FeedbackActivity.class);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startActivity(intent);
             }
         });
 

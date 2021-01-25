@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="UmNicknaMe"
+            android:text="@string/umnickname"
             android:textColor="@color/nivel6"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@id/constraint_layout_profile"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="pataria de cima"
+            android:text="@string/pataria_de_cima"
             android:visibility="invisible"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/linear_layout_text"
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"
-                android:text="Recipes"
+                android:text="@string/recipes"
                 android:textAlignment="center"
                 android:textColor="@color/nivel6"
                 android:textSize="22sp" />
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"
-                android:text="Inventory"
+                android:text="@string/inventory"
                 android:textAlignment="center"
                 android:textColor="@color/nivel6"
                 android:textSize="22sp" />
@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"
-                android:text="215"
+                android:text="@string/_215"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"
-                android:text="20"
+                android:text="@string/_20"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
@@ -126,10 +126,12 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_login_24" />
+        app:srcCompat="@drawable/ic_baseline_login_24"
+        android:focusable="true" />
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -149,7 +151,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="• Email:"
+            android:text="@string/email1"
             android:textAlignment="viewStart"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
@@ -162,7 +164,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:paddingStart="16dp"
-            android:text="umemail@exemple.com"
+            android:text="@string/umemail_exemple_com"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -173,7 +175,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="• Created at:"
+            android:text="@string/created_at"
             android:textAlignment="viewStart"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
@@ -186,7 +188,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:paddingStart="16dp"
-            android:text="2550-23-89"
+            android:text="@string/_2550_23_89"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -198,7 +200,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="• State:"
+            android:text="@string/state"
             android:textAlignment="viewStart"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
@@ -211,13 +213,25 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:paddingStart="16dp"
-            android:text="ativo"
+            android:text="@string/ativo"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/profileFeedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.163" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
