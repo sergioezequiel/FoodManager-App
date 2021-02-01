@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ public class ProfileFragment extends Fragment implements StatsListener {
     private static final int STAT_ELIMINADO = 0;
 
     private FloatingActionButton fabLogout;
+    private ImageButton ImagemPerfil;
+    private final static int Imagem_selecionada =1;
     private TextView textViewProfileName, txtProfileEmail, txtProfileCreated, txtState, textViewTotalRecipes, textViewTotalInventory;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -36,6 +39,7 @@ public class ProfileFragment extends Fragment implements StatsListener {
 
         fabLogout = root.findViewById(R.id.fabLogout);
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(LoginActivity.FOODMAN_SHARED_PREFS, Context.MODE_PRIVATE);
+
 
         fabLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,4 +105,8 @@ public class ProfileFragment extends Fragment implements StatsListener {
     public void onGetStatsDespensa(int stat) {
         textViewTotalInventory.setText(stat + "");
     }
+
+
+
+
 }

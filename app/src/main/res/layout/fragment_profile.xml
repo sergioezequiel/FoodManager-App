@@ -39,6 +39,7 @@
             app:layout_constraintStart_toEndOf="@+id/icon_profile"
             app:layout_constraintTop_toTopOf="@id/constraint_layout_profile" />
 
+
         <TextView
             android:id="@+id/textViewLocation"
             android:layout_width="wrap_content"

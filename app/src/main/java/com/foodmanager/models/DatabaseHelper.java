@@ -9,6 +9,7 @@ import android.os.NetworkOnMainThreadException;
 
 import androidx.annotation.Nullable;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -55,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String sqlCreate2 = "CREATE TABLE " + TABLE_ITENS_SHOPPING + " (" +
                 SHOPPING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SHOPPING_IMAGEM + " TEXT," +
+                SHOPPING_IMAGEM + " BLOB," +
                 SHOPPING_NOME + " TEXT NOT NULL );";
         db.execSQL(sqlCreate2);
     }

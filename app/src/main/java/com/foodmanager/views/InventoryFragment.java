@@ -84,7 +84,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         //inventoryItems = new ArrayList<>(inventoryItems);
     }
 
-    //Funcao é executada quando o fragmento é completamente creado
+    //Funcao é executada quando o fragmento é completamente criado
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

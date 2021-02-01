@@ -82,12 +82,12 @@ public class RecipesFragment extends Fragment implements ReceitaListener {
             public void onClick(View v) {
                 if (isOpen) {
                     SingletonDatabaseManager.getInstance(getContext()).getReceitasDisponiveis(getContext());
-                    allReceitas.startAnimation(fabAnticlock);
+                    allReceitas.setImageResource(R.drawable.ic_ingrediente_correto);
                     titulo("Available Recipes");
                     isOpen = false;
                 } else {
                     SingletonDatabaseManager.getInstance(getContext()).getTodasReceitas(getContext());
-                    allReceitas.startAnimation(fabClock);
+                    allReceitas.setImageResource(R.drawable.receitas_indisponiveis);
                     isOpen = true;
                     titulo("All Recipes");
                 }

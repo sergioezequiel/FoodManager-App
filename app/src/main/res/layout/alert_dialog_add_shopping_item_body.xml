@@ -17,18 +17,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_nome_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
-            app:hintTextColor="@color/nivel6"
-            app:boxStrokeColor="@color/nivel6"
             android:textColorHint="@color/nivel6"
+            app:boxStrokeColor="@color/nivel6"
+            app:hintTextColor="@color/nivel6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nomeProduct"
@@ -38,9 +40,40 @@
                 android:inputType="text"
                 android:textColor="@color/black" />
 
+
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:id="@+id/btn_adicionar_imagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/adiciona_uma_imagem"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagem" />
+        <Button
+            android:id="@+id/btn_tirar_foto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/tire_uma_foto"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_adicionar_imagem" />
 
+        <ImageView
+            android:id="@+id/imagem"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_item"
+            android:src="@drawable/imagem_default"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </com.google.android.material.card.MaterialCardView>
