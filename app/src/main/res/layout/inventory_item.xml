@@ -32,14 +32,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:text="Product Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/nivel6"
+            android:maxLength="18"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@+id/product_image"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/product_description"
@@ -58,23 +63,22 @@
             android:id="@+id/product_quantity"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="48dp"
+            android:layout_marginStart="7dp"
             android:text="QTY: 99"
             android:textColor="@color/nivel6"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/inventoryRemove"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.902" />
+            app:layout_constraintHorizontal_bias="0.032"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/product_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="144dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -85,16 +89,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/nivel7"
             android:minWidth="0dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:backgroundTint="@color/nivel7"
             android:text="Edit"
             app:icon="@drawable/ic_baseline_edit_24"
             app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_image"
+            app:layout_constraintTop_toBottomOf="@+id/product_quantity"
             app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton

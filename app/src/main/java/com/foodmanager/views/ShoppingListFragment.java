@@ -134,6 +134,7 @@ public class ShoppingListFragment extends Fragment implements ShoppingListListen
         startActivityForResult(pickPhoto , 1);
 
 
+
     }
     private void tirarFoto() {
 

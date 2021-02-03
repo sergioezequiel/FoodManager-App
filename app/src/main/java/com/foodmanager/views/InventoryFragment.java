@@ -1,12 +1,23 @@
 package com.foodmanager.views;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +39,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +59,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Document;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -54,7 +72,7 @@ import java.util.Random;
 public class InventoryFragment extends Fragment implements DespensaListener {
 
     //variaveis privadas
-    private FloatingActionButton fabAdd, fabScan, fabManual;
+    private FloatingActionButton fabAdd, fabScan, fabManual, fabPDF;
     private Animation fabOpen, fabClose, fabClock, fabAnticlock;
     private Boolean isOpen = false;
     private RecyclerView inventoryRecyclerView;
@@ -62,6 +80,10 @@ public class InventoryFragment extends Fragment implements DespensaListener {
     private RecyclerView.LayoutManager inventoryLayoutManager;
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private static final int tamanho = 25;
+    private int y;
+    private int x;
+
 
     // Dialog Edit
     private EditText txtNameEdit, txtQuantidadeEdit;
@@ -96,6 +118,8 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         prepareRecyclerView(view);
         //Funcao para ir buscar as funcoes de click
         clickFunctions(view);
+        //Iniciar o pdf
+        verPermissoes();
 
         //Adicionar o touch helper ao recycler view
         new ItemTouchHelper(inventoryCallBack).attachToRecyclerView(inventoryRecyclerView);
@@ -123,6 +147,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         fabAdd = view.findViewById(R.id.inventoryAdd);
         fabScan = view.findViewById(R.id.inventoryAddScanProduct);
         fabManual = view.findViewById(R.id.inventoryAddManualProduct);
+        fabPDF = view.findViewById(R.id.inventoryExporarPDF);
         fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
         fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
         fabClock = AnimationUtils.loadAnimation(getContext(), R.anim.fab_rotate_clock);
@@ -169,16 +194,20 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 if (isOpen) {
                     fabManual.startAnimation(fabClose);
                     fabScan.startAnimation(fabClose);
+                    fabPDF.startAnimation(fabClose);
                     fabAdd.startAnimation(fabAnticlock);
                     fabManual.setClickable(false);
                     fabScan.setClickable(false);
+                    fabPDF.setClickable(false);
                     isOpen = false;
                 } else {
                     fabManual.startAnimation(fabOpen);
                     fabScan.startAnimation(fabOpen);
+                    fabPDF.startAnimation(fabOpen);
                     fabAdd.startAnimation(fabClock);
                     fabManual.setClickable(true);
                     fabScan.setClickable(true);
+                    fabPDF.setClickable(true);
                     isOpen = true;
                 }
             }
@@ -228,6 +257,8 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 }
             }
         };
+
+
 
     }
 
@@ -341,5 +372,95 @@ public class InventoryFragment extends Fragment implements DespensaListener {
     public void onDelete(int position) {
         inventoryAdapter.notifyItemRemoved(position);
         inventoryAdapter.InventoryList.remove(position);
+    }
+
+
+    private void createPDF() {
+        fabPDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+
+                PdfDocument despensa = new PdfDocument();
+                Paint myPaint = new Paint();
+
+                PdfDocument.PageInfo InfoPag = new PdfDocument.PageInfo.Builder(1200,2000,1).create();
+                PdfDocument.Page pagina1 = despensa.startPage(InfoPag);
+                Canvas canvas = pagina1.getCanvas();
+                myPaint.setTextSize(tamanho);
+                //Definição da posição do texto
+                y = 40;
+
+                for(ItemDespensa item : inventoryAdapter.InventoryList) {
+                    x = 20;
+                    myPaint.setStyle(Paint.Style.FILL);
+                    canvas.drawText(item.getNome(),x , y, myPaint);
+                    x = x +500;
+                    canvas.drawText(String.valueOf(item.getQuantidade()) + " " + item.getUnidade(), x, y, myPaint);
+                    x = x +500;
+                    canvas.drawText(item.getValidade(), x, y, myPaint);
+                    y = y +80;
+                }
+
+                despensa.finishPage(pagina1);
+
+                ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
+                File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                File file = new File(directory, "Despensa" + ".PDF");
+
+                try {
+                    despensa.writeTo(new FileOutputStream(file));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                despensa.close();
+
+
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"email@example.com"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "body text");
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+
+                File fileFinal = new File(directory, "Despensa.PDF");
+                if (!fileFinal.exists() || !fileFinal.canRead()) {
+                    return;
+                }
+                Uri uri = Uri.fromFile(fileFinal);
+                emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+
+            }
+        });
+
+    }
+
+
+    public void verPermissoes() {
+
+        /*if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
+
+            String [] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            requestPermissions(permissions,REQUEST_WRITE_EXTERNAL_STORAGE_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
+
+            String [] permissions = {Manifest.permission.MANAGE_EXTERNAL_STORAGE};
+            requestPermissions(permissions,12);
+        }*/
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
+
+            String [] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(permissions,13);
+        }
+
+        createPDF();
     }
 }

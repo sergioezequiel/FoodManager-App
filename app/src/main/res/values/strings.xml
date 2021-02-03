@@ -25,4 +25,5 @@
     <string name="add_product">Add Product</string>
     <string name="adiciona_uma_imagem">Adiciona uma imagem</string>
     <string name="tire_uma_foto">Tire uma foto</string>
+    <string name="tirar_uma_foto">tirar uma foto</string>
 </resources>
