@@ -1,5 +1,6 @@
 package com.foodmanager.adapters;
 
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +75,9 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShoppingItem currentItem = InventoryList.get(position);
 
-
-        Glide.with(holder.productImage.getContext()).load(currentItem.getProductImage()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
+        //Glide.with(holder.productImage.getContext()).load(currentItem.getProductImage()).placeholder(R.drawable.logo).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.productImage);
         holder.productName.setText(currentItem.getProductName());
+        holder.productImage.setImageBitmap(BitmapFactory.decodeByteArray(currentItem.getProductImage(), 0, currentItem.getProductImage().length));
     }
 
     @Override

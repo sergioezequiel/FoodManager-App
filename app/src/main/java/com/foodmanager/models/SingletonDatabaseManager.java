@@ -3,8 +3,12 @@ package com.foodmanager.models;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -562,12 +567,15 @@ public class SingletonDatabaseManager {
         }
     }
 
-    public void adicionarIngredientesListaCompras(ArrayList<Ingrediente> ingredientes) {
+    public void adicionarIngredientesListaCompras(ArrayList<Ingrediente> ingredientes, Context context) {
         for (Ingrediente ingrediente : ingredientes) {
             ShoppingItem temp = new ShoppingItem();
             // temp.setProductName(ingrediente.getNome() + " " + ingrediente.getQuantString());
             temp.setProductName(ingrediente.getNome());
-            temp.setProductImage("");
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BitmapFactory.decodeResource(context.getResources(), R.drawable.img_logo).compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+
+            temp.setProductImage(outputStream.toByteArray());
             helper.adicionarItemShopping(temp);
         }
     }

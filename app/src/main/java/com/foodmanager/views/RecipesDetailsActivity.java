@@ -93,7 +93,7 @@ public class RecipesDetailsActivity extends AppCompatActivity implements Detalhe
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    SingletonDatabaseManager.getInstance(getApplicationContext()).adicionarIngredientesListaCompras(ingredientesEmFaltaArray);
+                                    SingletonDatabaseManager.getInstance(getApplicationContext()).adicionarIngredientesListaCompras(ingredientesEmFaltaArray, getApplicationContext());
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:

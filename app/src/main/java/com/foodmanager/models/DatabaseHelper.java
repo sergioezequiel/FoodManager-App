@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                itens.add(new ShoppingItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+                itens.add(new ShoppingItem(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2)));
             } while (cursor.moveToNext());
         }
 

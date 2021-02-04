@@ -2,12 +2,14 @@ package com.foodmanager.views;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,6 +57,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.security.Signature;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -192,8 +196,17 @@ public class ShoppingListFragment extends Fragment implements ShoppingListListen
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     ShoppingItem item = new ShoppingItem();
                     public void onClick(DialogInterface dialog, int id) {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        try {
+                            BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                            drawable.getBitmap().compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+                        }
+                        catch (ClassCastException ex) {
+                            BitmapFactory.decodeResource(getResources(), R.drawable.img_logo).compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+                        }
+
                         item.setProductName(addItem.getText().toString());
-                        item.setProductImage("");
+                        item.setProductImage(outputStream.toByteArray());
 
                         SingletonDatabaseManager.getInstance(getContext()).adicionarItemShopping(item);
                         Toast.makeText(getContext(), addItem.getText(), Toast.LENGTH_SHORT).show();
@@ -291,8 +304,7 @@ public class ShoppingListFragment extends Fragment implements ShoppingListListen
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
                                 imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                                byte[] byteArray = cursor.getBlob(columnIndex);
-                                imgbt = BitmapFactory.decodeByteArray(byteArray, 0 ,byteArray.length);
+
 
                                 cursor.close();
                             }

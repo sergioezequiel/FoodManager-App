@@ -3,11 +3,11 @@ package com.foodmanager.models;
 public class ShoppingItem {
 
     private int iditem;
-    private String productImage;
+    private byte[] productImage;
     private String productName;
 
 
-    public ShoppingItem(int iditem, String productImage, String productName) {
+    public ShoppingItem(int iditem, byte[] productImage, String productName) {
         this.iditem = iditem;
         this.productImage = productImage;
         this.productName = productName;
@@ -15,7 +15,7 @@ public class ShoppingItem {
 
     public ShoppingItem() {}
 
-    public String getProductImage() {
+    public byte[] getProductImage() {
         return productImage;
     }
 
@@ -31,7 +31,7 @@ public class ShoppingItem {
         this.iditem = iditem;
     }
 
-    public void setProductImage(String productImage) {
+    public void setProductImage(byte[] productImage) {
         this.productImage = productImage;
     }
 

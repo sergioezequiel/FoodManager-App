@@ -80,7 +80,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
     private RecyclerView.LayoutManager inventoryLayoutManager;
     private ItemTouchHelper.SimpleCallback inventoryCallBack;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private static final int tamanho = 25;
+    private static final int TAMANHO = 25;
     private int y;
     private int x;
 
@@ -118,7 +118,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
         prepareRecyclerView(view);
         //Funcao para ir buscar as funcoes de click
         clickFunctions(view);
-        //Iniciar o pdf
+        //Iniciar as permissões do pdf
         verPermissoes();
 
         //Adicionar o touch helper ao recycler view
@@ -389,7 +389,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 PdfDocument.PageInfo InfoPag = new PdfDocument.PageInfo.Builder(1200,2000,1).create();
                 PdfDocument.Page pagina1 = despensa.startPage(InfoPag);
                 Canvas canvas = pagina1.getCanvas();
-                myPaint.setTextSize(tamanho);
+                myPaint.setTextSize(TAMANHO);
                 //Definição da posição do texto
                 y = 40;
 
@@ -423,8 +423,8 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/plain");
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"email@example.com"});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "body text");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Assunto aqui");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Corpo do texto");
 
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
@@ -435,7 +435,7 @@ public class InventoryFragment extends Fragment implements DespensaListener {
                 }
                 Uri uri = Uri.fromFile(fileFinal);
                 emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+                startActivity(Intent.createChooser(emailIntent, "Contacto de envio"));
 
             }
         });
@@ -444,20 +444,9 @@ public class InventoryFragment extends Fragment implements DespensaListener {
 
 
     public void verPermissoes() {
-
-        /*if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
 
             String [] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            requestPermissions(permissions,REQUEST_WRITE_EXTERNAL_STORAGE_CODE);
-        }
-        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
-
-            String [] permissions = {Manifest.permission.MANAGE_EXTERNAL_STORAGE};
-            requestPermissions(permissions,12);
-        }*/
-        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ){
-
-            String [] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
             requestPermissions(permissions,13);
         }
 
