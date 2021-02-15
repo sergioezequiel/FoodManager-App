@@ -130,31 +130,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editTextEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:hint="@string/email"
-                    android:textColorHint="@color/white"
-                    app:endIconTint="@color/white"
-                    app:hintTextColor="@color/nivel6"
-                    app:layout_constraintTop_toBottomOf="@id/editTextAssunto"
-                    app:startIconTint="@color/white">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txtEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:inputType="textEmailAddress"
-                        android:textColor="@color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/editTextTexto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -165,7 +140,7 @@
                     android:textColorHint="@color/white"
                     app:endIconTint="@color/white"
                     app:hintTextColor="@color/nivel6"
-                    app:layout_constraintTop_toBottomOf="@id/editTextEmail"
+                    app:layout_constraintTop_toBottomOf="@id/editTextAssunto"
                     app:startIconTint="@color/white">
 
                     <com.google.android.material.textfield.TextInputEditText
