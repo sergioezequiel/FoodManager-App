@@ -42,7 +42,7 @@ import java.util.Map;
 public class SingletonDatabaseManager {
     // TODO: Alterar o IP consoante onde a app é corrida
     // O 10.0.2.2 é usado no emulador para usar o endereço do computador local: https://stackoverflow.com/a/6310592/10294941
-    public static final String WEBSITE_IP = "192.168.1.65";
+    public static final String WEBSITE_IP = "10.0.2.2";
 
     private static final String barcodeApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/codigosbarras/codigocomimagem";
     private static final String loginApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/login";
@@ -58,6 +58,7 @@ public class SingletonDatabaseManager {
     private static final String statsUserApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/user/stats";
     private static final String statsDespensaApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/itensdespensa/count";
     private static final String statsReceitasApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/receitas/count";
+    private static final String feedbackApi = "http://" + WEBSITE_IP + "/foodman/backend/web/api/feedback/adicionarfeedback";
 
     private static SingletonDatabaseManager instance = null;
     private DatabaseHelper helper;
@@ -540,6 +541,40 @@ public class SingletonDatabaseManager {
                 Log.d("Erro Volley", " " + error.getMessage());
             }
         });
+
+        volleyQueue.add(request);
+    }
+
+    public void adicionarFeedback(final Feedback feedback, Context context) {
+        if (!Utils.isConnected(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d("Pass", "Passou o check da internet e vai fazer o request");
+        StringRequest request = new StringRequest(Request.Method.POST, feedbackApi, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(context, "Feedback submetido com sucesso!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro Volley", " " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nome", feedback.getNome());
+                params.put("subject", feedback.getSubject());
+                params.put("texto", feedback.getTexto());
+                params.put("tipo", feedback.getTipo() + "");
+                params.put("apikey", apikey);
+
+                return params;
+            }
+        };
 
         volleyQueue.add(request);
     }
